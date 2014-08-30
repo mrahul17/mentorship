@@ -1,0 +1,16 @@
+{% include "includes/head.html" %}
+<br>
+<div style="text-align:center" class="jumbotron">
+	{% if msg %}
+	{% for message in msg %}
+	{{message}}
+	{% endfor %}
+	{% endif %}
+<div >
+<form action="" method="POST">{% csrf_token %}
+	{{ form.as_p }}
+	<input type="submit" value="Register" name="Submit" class="form-control">
+</form>
+</div>
+</div>
+{% include "includes/footer.html" %}
