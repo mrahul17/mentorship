@@ -3,6 +3,9 @@
 <div style="text-align:center" class="jumbotron">
 <div >
 <form action="alumnilogin.html" method="POST">{% csrf_token %}
+	{% if msg %}
+	{{msg}}
+	{% endif %}
 	{{ form.as_p }}
 	<input type="submit" value="Login" name="Submit" class="form-control">
 </form>

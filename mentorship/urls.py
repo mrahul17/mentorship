@@ -12,4 +12,6 @@ urlpatterns = patterns('',
     url(r'home$',home),
     url(r'alumnilogin',alumnilogin),
     url(r'alumniregister',alumniregister),
+    url(r'studentlogin',studentlogin),
+    url(r'studentregister',studentregister),
 )
