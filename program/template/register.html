@@ -1,16 +1,20 @@
 {% include "includes/head.html" %}
 <br>
-<div style="text-align:center" class="jumbotron">
+<div style="text-align:center" class="jumbotron row">
+
+	<div class="col-md-3"></div>
+<div class="col-md-6">
+	<h2>Register</h2>
 	{% if msg %}
 	{% for message in msg %}
 	{{message}}
 	{% endfor %}
 	{% endif %}
-<div >
 <form action="" method="POST">{% csrf_token %}
 	{{ form.as_p }}
-	<input type="submit" value="Register" name="Submit" class="form-control">
+	<input type="submit" value="Register" name="Submit" class="btn btn-success">
 </form>
 </div>
+<div class="col-md-3"></div>
 </div>
 {% include "includes/footer.html" %}

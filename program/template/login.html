@@ -1,14 +1,18 @@
 {% include "includes/head.html" %}
 <br>
-<div style="text-align:center" class="jumbotron">
-<div >
-<form action="alumnilogin.html" method="POST">{% csrf_token %}
+<div style="text-align:center" class="jumbotron row">
+	<div class="col-md-3"></div>
+<div class="col-md-6">
+	<h2>Login</h2>
 	{% if msg %}
 	{{msg}}
 	{% endif %}
 	{{ form.as_p }}
-	<input type="submit" value="Login" name="Submit" class="form-control">
+<form action="login.html" method="POST">{% csrf_token %}
+	
+	<input type="submit" value="Login" name="Submit" class="btn btn-success">
 </form>
 </div>
+<div class="col-md-3"></div>
 </div>
 {% include "includes/footer.html" %}
