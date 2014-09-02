@@ -7,9 +7,9 @@
 	{% if msg %}
 	{{msg}}
 	{% endif %}
-	{{ form.as_p }}
-<form action="login.html" method="POST">{% csrf_token %}
 	
+<form action="login.html" method="POST">{% csrf_token %}
+	{{ form.as_p }}
 	<input type="submit" value="Login" name="Submit" class="btn btn-success">
 </form>
 </div>

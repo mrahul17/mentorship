@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseRedirect
 from django.template import Context
 from django.template.loader import get_template
 from django.template.loader import render_to_string
@@ -12,30 +12,52 @@ def home(request):
 	return HttpResponse(template)
 
 def login(request):
+	userid=''
 	if request.method == 'GET':
 		form = Login()
 		return render(request,'login.html',{'form':form})
 		
-	else:
+	elif request.method == 'POST':
 		response = HttpResponse()
 		form = Login(request.POST)
-		if form.is_valid():
+		response.write('jfnn222')	
+		response.write(form.is_valid())
+		if (form.is_valid()):
 			emailid = form.cleaned_data['emailid']
 			password = form.cleaned_data['password']
+			membertype = form.cleaned_data['member']
+			if membertype=='student':
+				try:
+					userid1 = students.objects.filter(emailid = emailid)[:1].values()[0]['id']
+				except students.DoesNotExist:
+					userid1 = None
+			elif membertype =='alumni':		
+				try:
+					userid1 = alumni.objects.filter(emailid = emailid)
+				except alumni.DoesNotExist:
+					userid1 = None
 
-			try:
-				user = alumni.objects.get(emailid = emailid).firstname or students.objects.get(emailid=emailid)
-				response.write('User Found in database')
-			except alumni.DoesNotExist and students.DoesNotExist:
-				user = None
-				response.write('User Not Found')
 			
-			return response
+			if userid1:
+				response = showProfile(request,userid1,membertype)
+				
+				return response
+			elif userid1==None:
+				response.write('2Boo')
+				return response
+		else:
+			response.write('jfnn')	
+
+		for error in form.errors:
+			response.write(error)
+		
+		return response	
 
 
 
 def register(request):
 	response = HttpResponse()
+	user = ''
 	if request.method == 'GET':
 		form = Register()
 		return render(request,'register.html',{'form':form})
@@ -54,15 +76,36 @@ def register(request):
 				emailid = form.cleaned_data['emailid']
 				contactnumber =form.cleaned_data['contactnumber']
 				if member == 'alumni':
-					alumni1 = alumni(firstname = firstname,lastname = lastname,emailid = emailid,password = password,contactnumber = contactnumber)
-					alumni1.save()
-					alum = alumni.objects.all()
-				if member == 'student':
-					student1 = students(firstname = firstname,lastname = lastname,emailid = emailid,password = password,contactnumber = contactnumber)
-					student1.save()
-					student = students.objects.all()
-				response.write("dude you have registered")
-				return response
+					try:
+						user = alumni.objects.get(emailid = emailid)
+					except alumni.DoesNotExist:
+						user = None
+					if user!=None:
+						return render(request,'register.html',{'form':form,'msg':'This emailid id already exists'})
+					else:
+						
+						#render(request,'register.html',{'form':form,'msg':'This email id already exists'})
+						alumni1 = alumni(firstname = firstname,lastname = lastname,emailid = emailid,password = password,contactnumber = contactnumber)
+						alumni1.save()
+						alum = alumni.objects.all()
+				elif member == 'student':
+					try:
+						user = students.objects.get(emailid = emailid)
+					except students.DoesNotExist:
+						user = None
+					if user!=None :
+						return render(request,'register.html',{'form':form,'msg':'This email id already exists'})
+
+					else:	
+						student1 = students(firstname = firstname,lastname = lastname,emailid = emailid,password = password,contactnumber = contactnumber)
+						student1.save()
+				return render(request,'home.html',{'msg':'Congrats, You have successfully registered,you can login now.'})
 		else:	
 			errors = form.errors
-			return render(request,'register.html',{'form':form,'msg':"errors"})
+			return render(request,'register.html',{'form':form,'msg':"Please see the errors: ",'errors':errors})
+
+def showProfile(request,userid1,membertype):
+	if membertype=='student':
+		preferences = studentpreferences.objects.get(id = 1)
+		return preferences
+		#return render(request,'profile.html',{'preferences':preferences,'msg':'Fool Ya Fool'})
