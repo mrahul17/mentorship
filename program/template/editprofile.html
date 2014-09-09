@@ -1,0 +1,19 @@
+{% include "includes/head.html" %}
+<br>
+<h2>Edit Preferences</h2>
+<div style="text-align:center" class="jumbotron row">
+	<div class="col-md-3"></div>
+<div class="col-md-6">
+	
+	{% if msg %}
+	<span style = "color:red">{{msg}}</span><br>
+	{% endif %}
+	
+<form action="editProfile.html" method="POST">{% csrf_token %}
+	{{ form.as_p }}
+	<input type="submit" value="Save" name="Submit" class="btn btn-success">
+</form>
+</div>
+<div class="col-md-3"></div>
+</div>
+{% include "includes/footer.html" %}

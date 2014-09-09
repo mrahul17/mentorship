@@ -12,5 +12,6 @@ urlpatterns = patterns('',
     url(r'home$',home),
     url(r'login',login),
     url(r'register',register),
+    url(r'editProfile',editProfile),
     
 )

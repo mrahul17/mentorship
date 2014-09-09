@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 
 from django.http import HttpResponse,HttpResponseRedirect
 from django.template import Context
@@ -12,7 +12,8 @@ def home(request):
 	return HttpResponse(template)
 
 def login(request):
-	userid=''
+	userid = ''
+	firstname = ''
 	if request.method == 'GET':
 		form = Login()
 		return render(request,'login.html',{'form':form})
@@ -29,6 +30,7 @@ def login(request):
 			if membertype=='student':
 				try:
 					userid1 = students.objects.filter(emailid = emailid)[:1].values()[0]['id']
+					firstname = students.objects.filter(emailid = emailid)[:1].values()[0]['firstname']
 				except students.DoesNotExist:
 					userid1 = None
 			elif membertype =='alumni':		
@@ -39,14 +41,18 @@ def login(request):
 
 			
 			if userid1:
-				response = showProfile(request,userid1,membertype)
+				request.session['id'] = userid1
+				request.session['firstname'] = firstname
+				return showProfile(request,userid1,membertype)
+				
+				#return render(request,'profile.html',{'firstname':request.session['firstname'],'msg':response})
+				
+				#return response
+			elif userid1==None:
 				
 				return response
-			elif userid1==None:
-				response.write('2Boo')
-				return response
 		else:
-			response.write('jfnn')	
+			response.write('Error')	
 
 		for error in form.errors:
 			response.write(error)
@@ -104,8 +110,30 @@ def register(request):
 			errors = form.errors
 			return render(request,'register.html',{'form':form,'msg':"Please see the errors: ",'errors':errors})
 
+def editProfile(request):
+	from program.forms import EditProfile
+	form = EditProfile(request.POST)
+	if form.is_valid():	
+		department = form.cleaned_data['department']
+		cgpa = form.cleaned_data['cgpa']
+		interest1 = form.cleaned_data['interest1']
+		interest2 = form.cleaned_data['interest2']
+		interest3 = form.cleaned_data['interest3']
+		interest4 = form.cleaned_data['interest4']
+		preference = studentpreferences(department=department,cgpa=cgpa,interest1=interest1,interest2=interest2,interest3=interest3,interest4=interest4) 
+		preference.save()
+		return render(request,'home.html',{'msg':'Your preferences have been saved'})
+	else:
+		errors = form.errors
+		return render(request,'editProfile.html',{'firstname':request.session['firstname'],'form':form,'msg':'Please see the errors','errors':errors })
+
 def showProfile(request,userid1,membertype):
 	if membertype=='student':
-		preferences = studentpreferences.objects.get(id = 1)
-		return preferences
+		try:
+			preferences = studentpreferences.objects.get(id = 1)
+		except studentpreferences.DoesNotExist:
+			from program.forms import EditProfile
+			form = EditProfile()
+			return render(request,'editProfile.html',{'firstname':request.session['firstname'],'form':form})
+		
 		#return render(request,'profile.html',{'preferences':preferences,'msg':'Fool Ya Fool'})

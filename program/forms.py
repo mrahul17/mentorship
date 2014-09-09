@@ -14,3 +14,11 @@ class Register(forms.Form):
 	repassword = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Retype Password'}),label='')
 	contactnumber = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control','placeholder':'Contact Number'}),label='')
 	member = forms.ChoiceField(choices=[('student','student'),('alumni','alumni')],widget = forms.Select(attrs={'placeholder':'Register as','class':'form-control'}),label='')
+
+class EditProfile(forms.Form):
+	department = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Department','autofocus':'autofocus'}),label='')
+	cgpa = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'CGPA'}),label='')
+	interest1 = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'1st Interest'}),label='')
+	interest2 = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'2nd Interest'}),label='')
+	interest3 = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'3rd Interest'}),label='')
+	interest4 = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'4th Interest'}),label='')

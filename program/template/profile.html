@@ -1,9 +1,11 @@
 {% include "includes/head.html" %}
-
+ Hello{{firstname}}
 {% if not preferences %}
 Boo
 {% endif %}
-
+{% if preferences %}
 {{preferences}}
-
+{% endif %}
+{% if msg %}
 {{msg}}
+{% endif %}
