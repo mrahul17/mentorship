@@ -1,11 +1,37 @@
 {% include "includes/head.html" %}
- Hello{{firstname}}
+{% include "includes/menubar.html" %}
+<div class="row"><h4>Your preferences are:</h4></div>
 {% if not preferences %}
-Boo
+Some Error occurred in contacting the database. Could not load preferences.
 {% endif %}
 {% if preferences %}
-{{preferences}}
+{% if membertype == "student" %}
+<div class="col-md-6"><table class="table table-striped">
+<tr><td>Department</td><td>{{preferences.department}}</td></tr>
+<tr><td>CGPA</td><td>{{preferences.cgpa}}</td></tr>
+
+<tr><td>1st Interest</td><td>{{preferences.interest1}}</td></tr>
+
+<tr><td>2nd Interest</td><td>{{preferences.interest2}}</td></tr>
+
+<tr><td>3rd Interest</td><td>{{preferences.interest3}}</td></tr>
+
+<tr><td>4th Interest</td><td>{{preferences.interest4}}</td></tr>
+
+</table></div>
+<div class="col-md-6"></div>
+
+{% endif %}
+{% if membertype = "alumni" %}
+<div class="col-md-6"><table class="table table-striped">
+<tr><td>Department</td><td>{{preferences.department}}</td></tr>
+<tr><td>Interest</td><td>{{preferences.interest}}</td></tr>
+
+<tr><td>Number of Mentees</td><td>{{preferences.noofmentees}}</td></tr>
+</table></div>
+{% endif %}
 {% endif %}
 {% if msg %}
 {{msg}}
-{% endif %}
+{% endif %}<br>
+<div class="row"><h3>If you want to edit your preferences, click <a class="btn btn-primary" href="editProfile">Here</a></h3></div>

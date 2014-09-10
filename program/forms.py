@@ -15,10 +15,17 @@ class Register(forms.Form):
 	contactnumber = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control','placeholder':'Contact Number'}),label='')
 	member = forms.ChoiceField(choices=[('student','student'),('alumni','alumni')],widget = forms.Select(attrs={'placeholder':'Register as','class':'form-control'}),label='')
 
-class EditProfile(forms.Form):
+class EditStudentProfile(forms.Form):
 	department = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Department','autofocus':'autofocus'}),label='')
 	cgpa = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'CGPA'}),label='')
 	interest1 = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'1st Interest'}),label='')
 	interest2 = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'2nd Interest'}),label='')
 	interest3 = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'3rd Interest'}),label='')
 	interest4 = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'4th Interest'}),label='')
+
+class EditAlumniProfile(forms.Form):
+	department = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Your Department at IIT Kgp','autofocus':'autofocus'}),label='')
+	interest = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Area you would like to give guidance about'}),label='')
+	noofmentees = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control','placeholder':'Number of Mentees'}),label='')
+	organization = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control','placeholder':'Company or organization'}),label='')
+	designation = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control','placeholder':'Designation'}),label='')

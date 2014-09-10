@@ -7,6 +7,8 @@ class alumni(models.Model):
 	emailid = models.EmailField()
 	password = models.CharField(max_length =100)
 	contactnumber = models.CharField(max_length =15)
+	organization = models.CharField(max_length=100)
+	designation = models.CharField(max_length=100)
 
 class students(models.Model):
 	firstname = models.CharField(max_length =100)
@@ -37,3 +39,10 @@ class studentpreferences(models.Model):
 	mentorid5 = models.ForeignKey(alumni,related_name = 'studentpreferences_mentorid5',null=True)
 
 
+class alumnipreferences(models.Model):
+	id = models.ForeignKey(alumni,primary_key = True)
+
+	department = models.CharField(max_length =100)
+	interest = models.CharField(max_length=100)
+	noofmentees = models.IntegerField()
+	

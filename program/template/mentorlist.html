@@ -1,0 +1,15 @@
+{% include "includes/head.html" %}
+{% include "includes/menubar.html" %}
+{% if match1 %}
+<table class="table table-striped">
+<tr><th>Mentor Id</th><th>Department</th><th>Interest</th><th>organization</th><th>Desingation</th></tr>
+{% for match in match1%}
+<tr>
+{% for item in match %}
+<td>{{item}}</td>
+{% endfor %}
+{% endfor %}
+</tr>
+</table>
+
+{% endif %}
