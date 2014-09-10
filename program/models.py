@@ -26,12 +26,12 @@ class interest(models.Model):
 
 class studentpreferences(models.Model):
 	id = models.ForeignKey(students,primary_key = True)
-	department = models.CharField(max_length =100)
+	department = models.ForeignKey(departments)
 	cgpa = models.DecimalField(max_digits = 3,decimal_places=2)
-	interest1 = models.CharField(max_length=100)	
-	interest2 = models.CharField(max_length=100)
-	interest3 = models.CharField(max_length=100)
-	interest4 = models.CharField(max_length=100)
+	interest1 = models.ForeignKey(interest,related_name = 'studentpreferences_interest1',null = True)
+	interest2 = models.ForeignKey(interest,related_name = 'studentpreferences_interest2',null = True)
+	interest3 = models.ForeignKey(interest,related_name = 'studentpreferences_interest3',null = True)
+	interest4 = models.ForeignKey(interest,related_name = 'studentpreferences_interest4',null = True)
 	mentorid1 = models.ForeignKey(alumni,related_name = 'studentpreferences_mentorid1',null=True)
 	mentorid2 = models.ForeignKey(alumni,related_name = 'studentpreferences_mentorid2',null=True)
 	mentorid3 = models.ForeignKey(alumni,related_name = 'studentpreferences_mentorid3',null=True)
@@ -42,7 +42,7 @@ class studentpreferences(models.Model):
 class alumnipreferences(models.Model):
 	id = models.ForeignKey(alumni,primary_key = True)
 
-	department = models.CharField(max_length =100)
-	interest = models.CharField(max_length=100)
+	department = models.ForeignKey(departments)
+	interest = models.ForeignKey(interest)
 	noofmentees = models.IntegerField()
 	

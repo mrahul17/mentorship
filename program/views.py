@@ -62,6 +62,7 @@ def login(request):
 
 
 def register(request):
+
 	response = HttpResponse()
 	user = ''
 	if request.method == 'GET':
@@ -123,7 +124,7 @@ def editProfile(request):
 		if request.session['membertype']=='student':
 			form = EditStudentProfile(request.POST)
 			if form.is_valid():	
-				department = form.cleaned_data['department']
+				department = departments.objects.get(id =form.cleaned_data['department'])
 				cgpa = form.cleaned_data['cgpa']
 				interest1 = form.cleaned_data['interest1']
 				interest2 = form.cleaned_data['interest2']
