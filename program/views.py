@@ -331,4 +331,29 @@ def logout(request):
 
 def email(subject,emailid,firstname,msg):
 	send_mail(subject,msg,'mentorship@adm.iitkgp.ernet.in',[emailid])
-	
+
+def selectmentor(request):
+	response = HttpResponse()
+	result = accessCheck(request)
+	if result==0:
+ 		return HttpResponseRedirect("home")
+ 	if request.method=='GET':
+ 		return HttpResponseRedirect("showProfile")
+ 	elif request.method=='POST':
+ 		mentoridlist = request.POST.getlist('mentorid')
+ 		preference = studentpreferences.objects.get(id = students.objects.get(id=request.session['id']))
+ 
+ 		
+ 		if len(mentoridlist)>0:
+ 			preference.mentorid1 = alumni.objects.get(id =mentoridlist[0])
+ 		if len(mentoridlist)>1:
+ 			preference.mentorid2 = alumni.objects.get(id =mentoridlist[1])
+ 		if len(mentoridlist)>2:
+ 			preference.mentorid3 = alumni.objects.get(id =mentoridlist[2])
+ 		if len(mentoridlist)>3:
+ 			preference.mentorid4 = alumni.objects.get(id =mentoridlist[3])
+ 		if len(mentoridlist)>4:
+ 			preference.mentorid5 = alumni.objects.get(id =mentoridlist[4])		
+ 		preference.save()
+ 		
+ 	return HttpResponseRedirect("showProfile")

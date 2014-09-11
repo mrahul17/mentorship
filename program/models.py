@@ -32,11 +32,11 @@ class studentpreferences(models.Model):
 	interest2 = models.ForeignKey(interest,related_name = 'studentpreferences_interest2',null = True)
 	interest3 = models.ForeignKey(interest,related_name = 'studentpreferences_interest3',null = True)
 	interest4 = models.ForeignKey(interest,related_name = 'studentpreferences_interest4',null = True)
-	mentorid1 = models.ForeignKey(alumni,related_name = 'studentpreferences_mentorid1',null=True)
-	mentorid2 = models.ForeignKey(alumni,related_name = 'studentpreferences_mentorid2',null=True)
-	mentorid3 = models.ForeignKey(alumni,related_name = 'studentpreferences_mentorid3',null=True)
-	mentorid4 = models.ForeignKey(alumni,related_name = 'studentpreferences_mentorid4',null=True)
-	mentorid5 = models.ForeignKey(alumni,related_name = 'studentpreferences_mentorid5',null=True)
+	mentorid1 = models.ForeignKey(alumni,related_name = 'studentpreferences_mentorid1',null=True,default = None)
+	mentorid2 = models.ForeignKey(alumni,related_name = 'studentpreferences_mentorid2',null=True,default = None)
+	mentorid3 = models.ForeignKey(alumni,related_name = 'studentpreferences_mentorid3',null=True,default = None)
+	mentorid4 = models.ForeignKey(alumni,related_name = 'studentpreferences_mentorid4',null=True,default = None)
+	mentorid5 = models.ForeignKey(alumni,related_name = 'studentpreferences_mentorid5',null=True,default = None)
 
 
 class alumnipreferences(models.Model):

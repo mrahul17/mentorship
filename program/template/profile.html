@@ -6,6 +6,7 @@ Some Error occurred in contacting the database. Could not load preferences.
 {% endif %}
 {% if preferences %}
 {% if membertype == "student" %}
+<div class="row">
 <div class="col-md-6"><table class="table table-striped">
 <tr><td>Department</td><td>{{preferences.department.department}}</td></tr>
 <tr><td>CGPA</td><td>{{preferences.cgpa}}</td></tr>
@@ -17,10 +18,14 @@ Some Error occurred in contacting the database. Could not load preferences.
 <tr><td>3rd Interest</td><td>{{preferences.interest3.interest}}</td></tr>
 
 <tr><td>4th Interest</td><td>{{preferences.interest4.interest}}</td></tr>
-
-</table></div>
-<div class="col-md-6"></div>
-
+</table></div><div class="col-md-6"><table class="table table-striped">
+<tr><td>1st Mentor Preference</td><td>{{preferences.mentorid1.firstname}} {{preferences.mentorid1.lastname}}</td></tr>
+<tr><td>2nd Mentor Preference</td><td>{{preferences.mentorid2.firstname}} {{preferences.mentorid2.lastname}}</td></tr>
+<tr><td>3rd Mentor Preference</td><td>{{preferences.mentorid3.firstname}} {{preferences.mentorid3.lastname}}</td></tr>
+<tr><td>4th Mentor Preference</td><td>{{preferences.mentorid4.firstname}} {{preferences.mentorid4.lastname}}</td></tr>
+<tr><td>5th Mentor Preference</td><td>{{preferences.mentorid5.firstname}} {{preferences.mentorid5.lastname}}</td></tr>
+</table></div><br>
+</div>
 {% endif %}
 {% if membertype = "alumni" %}
 <div class="col-md-6"><table class="table table-striped">

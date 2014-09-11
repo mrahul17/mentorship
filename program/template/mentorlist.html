@@ -1,11 +1,16 @@
 {% include "includes/head.html" %}
 {% include "includes/menubar.html" %}
+<form action="selectmentor" method="POST">{% csrf_token %}
 {% if match1 %}
 <table class="table">
-<tr><th>Mentor Id</th><th>Department</th><th>Interest</th><th>organization</th><th>Desingation</th></tr>
+<tr><th>Select</th><th>Department</th><th>Interest</th><th>organization</th><th>Desingation</th></tr>
 {% for match in match1%}
 <tr>
-{% for item in match %}
+	{% for item in match|slice:"0:1" %}<td><input type="checkbox" name="mentorid" value="{{item}}"> </td>
+	{% endfor %}
+	
+{% for item in match|slice:"1:" %}
+
 <td>{{item}}</td>
 {% endfor %}
 {% endfor %}
@@ -15,10 +20,14 @@
 {% endif %}
 {% if match2 %}
 <table class="table">
-<tr><th>Mentor Id</th><th>Department</th><th>Interest</th><th>organization</th><th>Desingation</th></tr>
+<tr><th>Select</th><th>Department</th><th>Interest</th><th>organization</th><th>Desingation</th></tr>
 {% for match in match2 %}
 <tr>
-{% for item in match %}
+{% for item in match|slice:"0:1" %}<td><input type="checkbox" name="mentorid" value="{{item}}"> </td>
+	{% endfor %}
+	
+{% for item in match|slice:"1:" %}
+
 <td>{{item}}</td>
 {% endfor %}
 {% endfor %}
@@ -28,10 +37,14 @@
 {% endif %}
 {% if match3 %}
 <table class="table">
-<tr><th>Mentor Id</th><th>Department</th><th>Interest</th><th>organization</th><th>Desingation</th></tr>
+<tr><th>Select</th><th>Department</th><th>Interest</th><th>organization</th><th>Desingation</th></tr>
 {% for match in match3 %}
 <tr>
-{% for item in match %}
+{% for item in match|slice:"0:1" %}<td><input type="checkbox" name="mentorid" value="{{item}}"> </td>
+	{% endfor %}
+	
+{% for item in match|slice:"1:" %}
+
 <td>{{item}}</td>
 {% endfor %}
 {% endfor %}
@@ -41,10 +54,14 @@
 {% endif %}
 {% if match4 %}
 <table class="table">
-<tr><th>Mentor Id</th><th>Department</th><th>Interest</th><th>organization</th><th>Desingation</th></tr>
+<tr><th>Select</th><th>Department</th><th>Interest</th><th>organization</th><th>Desingation</th></tr>
 {% for match in match4 %}
 <tr>
-{% for item in match %}
+{% for item in match|slice:"0:1" %}<td><input type="checkbox" name="mentorid" value="{{item}}"> </td>
+	{% endfor %}
+	
+{% for item in match|slice:"1:" %}
+
 <td>{{item}}</td>
 {% endfor %}
 {% endfor %}
@@ -52,3 +69,5 @@
 </table>
 
 {% endif %}
+<input type="submit" class="btn btn-primary" name="submit" value="Select">
+</form>

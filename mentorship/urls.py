@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     url(r'showProfile',showProfile),
     url(r'mentorlist',mentorlist),
     url(r'dashboard',dashboard),
-    url(r'logout',logout)
+    url(r'logout',logout),
+    url(r'selectmentor',selectmentor)
     
 )
