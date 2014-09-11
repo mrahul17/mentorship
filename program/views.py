@@ -53,7 +53,7 @@ def login(request):
 			
 			if userid1:
 				request.session['id'] = userid1
-				request.session['firstname'] = firstname
+				request.session['firstname'] = firstname or "yo"
 				request.session['membertype'] = membertype
 				return showProfile(request)
 				
@@ -171,7 +171,7 @@ def editProfile(request):
 				except studentpreferences.DoesNotExist:
 					preference = studentpreferences(id =obj, department=department,cgpa=cgpa,interest1=interest1,interest2=interest2,interest3=interest3,interest4=interest4) 
 					preference.save()
-				return render(request,'home.html',{'msg':'Your preferences have been updated.'})
+				return render(request,'home.html',{'firstname':request.session['firstname'],'msg':'Your preferences have been updated.'})
 			else:
 				errors = form.errors
 				return render(request,'editProfile.html',{'firstname':request.session['firstname'],'form':form,'msg':'Please see the errors','errors':errors })
@@ -196,7 +196,7 @@ def editProfile(request):
 					
 				alumni.objects.filter(id = request.session['id']).update(designation = designation,organization=organization)
 
-				return render(request,'home.html',{'msg':'Your preferences have been updated.'})
+				return render(request,'home.html',{'firstname':request.session['firstname'],'msg':'Your preferences have been updated.'})
 			else:
 				errors = form.errors
 				return render(request,'editProfile.html',{'firstname':request.session['firstname'],'form':form,'msg':'Please see the errors','errors':errors })
@@ -308,3 +308,9 @@ def dashboard(request):
 	response.write('this is dasg')
 	return response
 
+def logout(request):
+	result = accessCheck(request)
+	if result==0:
+ 	   return HttpResponseRedirect("home")
+	request.session.flush()
+	return HttpResponseRedirect("home")

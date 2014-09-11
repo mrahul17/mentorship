@@ -1,10 +1,13 @@
 <ul class="nav nav-pills">
 
 	<li><a href="home">Home</a></li>
-	{% if firstname != "Guest" %}
+	{% if firstname and firstname != "Guest" %}
 	<li><a href="showProfile">ShowProfile</a></li>
+	<li><a href="mentorlist">List of Mentors</a></li>
+	<li><a href="logout">Logout</a></li>
 	<!--add other things here -->
-	{% endif %}
 	<li><a hre="#">Logged in as {{firstname}}</a></li>
+	{% endif %}
+	
 
 </ul>
