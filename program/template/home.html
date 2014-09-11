@@ -1,4 +1,5 @@
 {% include "includes/head.html" %}<br>
+{% include "includes/menubar.html" %}
 {% if msg %}
 <center><span class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 {{msg}}
@@ -9,8 +10,9 @@
 The Mentorship Programme was commenced by Students’ Alumni Cell in the academic session 2010-2011 as a humble yet intrepid step to bring closer the students and alumni of this Institute. With each passing year here at IIT Kharagpur, the students stand at the thresholds of limitless possibilities, poised for a promising start to their careers but equally baffled as to how to tread the paths ahead; what they need is not just a graduation degree but a beacon to light the way ahead- someone with both experience and wisdom on his side to take us under his wings. Keeping this in mind, the Students’ Alumni Cell IIT Kharagpur, is promoting its initiative “Student Alumni Mentorship Programme” which offers the students the unique opportunity of interacting on a personal level with the well-placed alumni of the Institute. It aims at a healthy interaction between an interested mentor and eager protégé, thus fostering and nurturing a strong alumnus-student relationship.
 
      This programme matches the profiles of the applicants and the alumni based on common goals and career interests. The students can choose their own mentors based on a variety of aspects including field of study, their career interests and the personal preferences of the mentor. The mentors would advise the protégés on any sort of problems faced by them and would be able to provide information related to professional and career options. The regular proactive and candid communication between the mentor and protégé on issues related to career path, resumes, course selection, international perspectives and work/family enables the protégé to streamline his priorities and goals whilst gearing him up to confront the ground realities of the world today. Students’ Alumni Cell has been instrumental in forging these ties between the students and the mentors ensuring smooth communication between them. Students will undoubtedly benefit from the valuable advice and perspective of their mentor that goes beyond the realm of textbooks; Thus providing students of IIT Kharagpur the opportunity of fostering a strong and lasting relationship with the people whose hindsight can become their foresight.<br/><hr>
-
+{% if firstname == "Guest" %}
 <table class="table" style="text-align:center">
 <tr><td class="col-md-6"><a class="btn btn-primary" href="login">Login</a> </td><td class="col-md-6"><a class="btn btn-primary" href="register">Register</a></td></tr>
 </table>
+{% endif %}
 {% include "includes/footer.html" %}

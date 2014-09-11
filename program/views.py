@@ -6,12 +6,24 @@ from django.template.loader import get_template
 from django.template.loader import render_to_string
 from program.forms import Login,Register
 from program.models import *
+from django.http import HttpResponseRedirect
 
 def home(request):
-	template = render_to_string('home.html')
-	return HttpResponse(template)
+	if 'firstname' not in request.session:
+		request.session['firstname'] = "Guest"
+	return render(request,'home.html',{'firstname':request.session['firstname']})
+
+def accessCheck(request):
+	if 'id' not in request.session:
+		return 0
+	else:
+		return 1
 
 def login(request):
+	result = accessCheck(request)
+	if result==1:
+ 	   return HttpResponseRedirect("dashboard")
+
 	userid = ''
 	firstname = ''
 	if request.method == 'GET':
@@ -62,7 +74,9 @@ def login(request):
 
 
 def register(request):
-
+	result = accessCheck(request)
+	if result==1:
+ 	   return HttpResponseRedirect("dashboard")
 	response = HttpResponse()
 	user = ''
 	if request.method == 'GET':
@@ -112,6 +126,9 @@ def register(request):
 			return render(request,'register.html',{'form':form,'msg':"Please see the errors: ",'errors':errors})
 
 def editProfile(request):
+	result = accessCheck(request)
+	if result==0:
+ 	   return HttpResponseRedirect("home")
 	from program.forms import EditStudentProfile, EditAlumniProfile
 	from program.models import interest
 	form = ''
@@ -185,6 +202,9 @@ def editProfile(request):
 				return render(request,'editProfile.html',{'firstname':request.session['firstname'],'form':form,'msg':'Please see the errors','errors':errors })
 
 def showProfile(request):
+	result = accessCheck(request)
+	if result==0:
+ 	   return HttpResponseRedirect("home")
 	userid1 = request.session['id']
 	membertype = request.session['membertype']
 	preferences = {}
@@ -209,6 +229,9 @@ def showProfile(request):
 		return render(request,'profile.html',{'preferences':preferences,'msg':'','membertype':membertype,'firstname':request.session['firstname']})
 
 def mentorlist(request,suggest="off"):
+	result = accessCheck(request)
+	if result==0:
+ 	   return HttpResponseRedirect("home")
 	response = HttpResponse()
 	al1=[]
 	al2=[]
@@ -279,3 +302,9 @@ def mentorlist(request,suggest="off"):
 
 	else:
 		pass
+
+def dashboard(request):
+	response = HttpResponse()
+	response.write('this is dasg')
+	return response
+

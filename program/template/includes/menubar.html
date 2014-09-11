@@ -1,6 +1,10 @@
 <ul class="nav nav-pills">
+
 	<li><a href="home">Home</a></li>
+	{% if firstname != "Guest" %}
 	<li><a href="showProfile">ShowProfile</a></li>
+	<!--add other things here -->
+	{% endif %}
 	<li><a hre="#">Logged in as {{firstname}}</a></li>
 
 </ul>
