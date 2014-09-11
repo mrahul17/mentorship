@@ -156,6 +156,15 @@ def editProfile(request):
 				interest2 = interest.objects.get(id = form.cleaned_data['interest2'])
 				interest3 = interest.objects.get(id = form.cleaned_data['interest3'])
 				interest4 = interest.objects.get(id = form.cleaned_data['interest4'])
+				interestlist = [interest1,interest2,interest3,interest4]
+				if len(interestlist)!=len(set(interestlist)):
+					try:	
+						filleddata = studentpreferences.objects.get(id = students.objects.get(id = request.session['id']))
+						form = EditStudentProfile({'department':filleddata.department.id,'cgpa':filleddata.cgpa,'interest1':filleddata.interest1.id,'interest2':filleddata.interest2.id,'interest3':filleddata.interest3.id,'interest4':filleddata.interest4.id})
+					except studentpreferences.DoesNotExist:
+						form = EditStudentProfile()
+					return render(request,'editProfile.html',{'firstname':request.session['firstname'],'form':form,'msg':'You have to specify different interest or leave it blank'})
+
 				department = departments.objects.get(id =form.cleaned_data['department'])
 				cgpa = form.cleaned_data['cgpa']
 				obj = students.objects.get(id = request.session['id'])
@@ -294,11 +303,10 @@ def mentorlist(request,suggest="off"):
 					match['organization'] = alum.organization
 					match['designation'] = alum.designation	
 					al4.append([match['id'],match['department'],match['interest'],match['organization'],match['designation']])
-			return render(request,'mentorlist.html',{'match1':al1,'match2':al2,'match3':al3,'match4':al4})
+			return render(request,'mentorlist.html',{'firstname':request.session['firstname'],'match1':al1,'match2':al2,'match3':al3,'match4':al4})
 		else:
-			response.write("Boo")
-			response.write(preference)
-		return response
+			
+			return render(request,'mentorlist.html',{'firstname':request.session['firstname'],'msg':'Sorry, we have no mentors with matching preferences'})
 
 	else:
 		pass
