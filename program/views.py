@@ -114,11 +114,21 @@ def register(request):
 def editProfile(request):
 	from program.forms import EditStudentProfile, EditAlumniProfile
 	from program.models import interest
+	form = ''
 	if request.method=='GET' and request.session['membertype']=="student":
-		form = EditStudentProfile()
+		try:
+			filleddata = studentpreferences.objects.get(id = students.objects.get(id = request.session['id']))
+			form = EditStudentProfile({'department':filleddata.department.id,'cgpa':filleddata.cgpa,'interest1':filleddata.interest1.id,'interest2':filleddata.interest2.id,'interest3':filleddata.interest3.id,'interest4':filleddata.interest4.id})
+		except studentpreferences.DoesNotExist:
+			form = EditStudentProfile()
 		return render(request,'editProfile.html',{'firstname':request.session['firstname'],'form':form,'msg':''})
 	if request.method=='GET' and request.session['membertype']=="alumni":
-		form = EditAlumniProfile()
+		try:
+			filleddata = alumnipreferences.objects.get(id = alumni.objects.get(id = request.session['id']))
+			filleddata2 = alumni.objects.get(id=request.session['id'])
+			form = EditAlumniProfile({'department':filleddata.department.id,'interest':filleddata.interest.id,'noofmentees':filleddata.noofmentees,'organization':filleddata2.organization,'designation':filleddata2.designation})
+		except alumnipreferences.DoesNotExist:
+			form = EditAlumniProfile()
 		return render(request,'editProfile.html',{'firstname':request.session['firstname'],'form':form,'msg':''})
 
 	else:
