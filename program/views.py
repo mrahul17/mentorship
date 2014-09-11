@@ -318,10 +318,6 @@ def mentorlist(request,suggest="off"):
 		pass
 
 def dashboard(request):
-	from django.core.mail import send_mail
-
-	send_mail('Subject here', 'Here is the message.', 'webmaster@localhost.com',
-    ['mishra.rahul1712@gmail.com'], fail_silently=False)
 	response = HttpResponse()
 	response.write('this is dasg')
 	return response
