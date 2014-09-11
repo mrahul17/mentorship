@@ -7,6 +7,7 @@ from django.template.loader import render_to_string
 from program.forms import Login,Register
 from program.models import *
 from django.http import HttpResponseRedirect
+from django.core.mail import send_mail
 
 def home(request):
 	if 'firstname' not in request.session:
@@ -109,6 +110,8 @@ def register(request):
 						alumni1 = alumni(firstname = firstname,lastname = lastname,emailid = emailid,password = password,contactnumber = contactnumber)
 						alumni1.save()
 						alum = alumni.objects.all()
+						email(subject="Student Alumni Mentorship Program IIT Kharagpur",emailid=emailid,firstname=firstname,msg ="Thank you for regsitering as a mentor for the Student Alumni Mentorship Program. Your loginid is " +str(emailid)+" And your password is "+str(password))
+
 				elif member == 'student':
 					try:
 						user = students.objects.get(emailid = emailid)
@@ -120,6 +123,9 @@ def register(request):
 					else:	
 						student1 = students(firstname = firstname,lastname = lastname,emailid = emailid,password = password,contactnumber = contactnumber)
 						student1.save()
+						email(subject="Student Alumni Mentorship Program IIT Kharagpur",emailid=emailid,firstname=firstname,msg ="You have been regsitered for the Student Alumni Mentorship Program. Your loginid is " +str(emailid)+" And your password is "+str(password))
+
+				
 				return render(request,'home.html',{'msg':'Congrats, You have successfully registered,you can login now.'})
 		else:	
 			errors = form.errors
@@ -312,6 +318,10 @@ def mentorlist(request,suggest="off"):
 		pass
 
 def dashboard(request):
+	from django.core.mail import send_mail
+
+	send_mail('Subject here', 'Here is the message.', 'webmaster@localhost.com',
+    ['mishra.rahul1712@gmail.com'], fail_silently=False)
 	response = HttpResponse()
 	response.write('this is dasg')
 	return response
@@ -322,3 +332,7 @@ def logout(request):
  	   return HttpResponseRedirect("home")
 	request.session.flush()
 	return HttpResponseRedirect("home")
+
+def email(subject,emailid,firstname,msg):
+	send_mail(subject,msg,'mentorship@adm.iitkgp.ernet.in',[emailid])
+	
