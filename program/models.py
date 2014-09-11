@@ -42,7 +42,7 @@ class studentpreferences(models.Model):
 class alumnipreferences(models.Model):
 	id = models.ForeignKey(alumni,primary_key = True)
 
-	department = models.ForeignKey(departments)
-	interest = models.ForeignKey(interest)
+	department = models.ForeignKey(departments,related_name='alumnipreferences_department')
+	interest = models.ForeignKey(interest,related_name='alumnipreferences_interest')
 	noofmentees = models.IntegerField()
 	

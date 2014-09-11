@@ -27,14 +27,14 @@ def login(request):
 			membertype = form.cleaned_data['member']
 			if membertype=='student':
 				try:
-					userid1 = students.objects.filter(emailid = emailid)[:1].values()[0]['id']
-					firstname = students.objects.filter(emailid = emailid)[:1].values()[0]['firstname']
+					userid1 = students.objects.get(emailid = emailid).id
+					firstname = students.objects.get(emailid = emailid).firstname
 				except students.DoesNotExist:
 					userid1 = None
 			elif membertype =='alumni':		
 				try:
-					userid1 = alumni.objects.filter(emailid = emailid)[:1].values()[0]['id']
-					firstname = alumni.objects.filter(emailid = emailid)[:1].values()[0]['firstname']
+					userid1 = alumni.objects.get(emailid = emailid).id
+					firstname = alumni.objects.get(emailid = emailid).firstname
 				except alumni.DoesNotExist:
 					userid1 = None
 
@@ -50,7 +50,7 @@ def login(request):
 				#return response
 			elif userid1==None:
 				
-				return response
+				return render(request,'home.html',{'msg' :'Username Password combination incorrect'})
 		else:
 			response.write('Error')	
 
@@ -113,6 +113,7 @@ def register(request):
 
 def editProfile(request):
 	from program.forms import EditStudentProfile, EditAlumniProfile
+	from program.models import interest
 	if request.method=='GET' and request.session['membertype']=="student":
 		form = EditStudentProfile()
 		return render(request,'editProfile.html',{'firstname':request.session['firstname'],'form':form,'msg':''})
@@ -124,16 +125,25 @@ def editProfile(request):
 		if request.session['membertype']=='student':
 			form = EditStudentProfile(request.POST)
 			if form.is_valid():	
+				interest1 = interest.objects.get(id = form.cleaned_data['interest1'])
+				interest2 = interest.objects.get(id = form.cleaned_data['interest2'])
+				interest3 = interest.objects.get(id = form.cleaned_data['interest3'])
+				interest4 = interest.objects.get(id = form.cleaned_data['interest4'])
 				department = departments.objects.get(id =form.cleaned_data['department'])
 				cgpa = form.cleaned_data['cgpa']
-				interest1 = form.cleaned_data['interest1']
-				interest2 = form.cleaned_data['interest2']
-				interest3 = form.cleaned_data['interest3']
-				interest4 = form.cleaned_data['interest4']
-			
 				obj = students.objects.get(id = request.session['id'])
-				preference = studentpreferences(id =obj, department=department,cgpa=cgpa,interest1=interest1,interest2=interest2,interest3=interest3,interest4=interest4) 
-				preference.save()
+				try:
+					preference = studentpreferences.objects.get(id = obj)
+					preference.department = department
+					preference.interest1 = interest1
+					preference.interest2 = interest2
+					preference.interest3 = interest3
+					preference.interest4 = interest4
+					preference.cgpa = cgpa
+					preference.save()
+				except studentpreferences.DoesNotExist:
+					preference = studentpreferences(id =obj, department=department,cgpa=cgpa,interest1=interest1,interest2=interest2,interest3=interest3,interest4=interest4) 
+					preference.save()
 				return render(request,'home.html',{'msg':'Your preferences have been updated.'})
 			else:
 				errors = form.errors
@@ -141,16 +151,24 @@ def editProfile(request):
 		else:
 			form = EditAlumniProfile(request.POST)
 			if form.is_valid():	
-				department = form.cleaned_data['department']
-				interest = form.cleaned_data['interest']	
+				department = departments.objects.get(id =form.cleaned_data['department'])
+				interest = interest.objects.get(id = form.cleaned_data['interest'])	
 				noofmentees = form.cleaned_data['noofmentees']	
 				organization = form.cleaned_data['organization']
 				designation = form.cleaned_data['designation']	
 				obj = alumni.objects.get(id = request.session['id'])
-				preference = alumnipreferences(id =obj, department=department,interest=interest,noofmentees = noofmentees) 
-				preference.save()
-				profile = alumni(id = obj,designation = designation,organization=organization)
-				profile.save()
+				try:
+					preference = alumnipreferences.objects.get(id=obj)
+					preference.department = department
+					preference.interest = interest
+					preference.noofmentees = noofmentees
+					preference.save()
+				except alumnipreferences.DoesNotExist:
+					preference = alumnipreferences(id =obj, department=department,interest=interest,noofmentees = noofmentees) 
+					preference.save()
+					
+				alumni.objects.filter(id = request.session['id']).update(designation = designation,organization=organization)
+
 				return render(request,'home.html',{'msg':'Your preferences have been updated.'})
 			else:
 				errors = form.errors
@@ -181,6 +199,7 @@ def showProfile(request):
 		return render(request,'profile.html',{'preferences':preferences,'msg':'','membertype':membertype,'firstname':request.session['firstname']})
 
 def mentorlist(request,suggest="off"):
+	response = HttpResponse()
 	al1=[]
 	al2=[]
 	al3=[]
@@ -188,50 +207,65 @@ def mentorlist(request,suggest="off"):
 	match = ''
 	userid = request.session['id']
 	user = students.objects.get(id=userid)
-	try:
-		preference = studentpreferences.objects.get(id =user )
-	except studentpreferences.DoesNotExist:
-		preference = None
+	preference=''
+	if suggest=="off":
+		try:
+			preference = studentpreferences.objects.get(id =user )
 
-	response = HttpResponse()
-	if preference:
+		except studentpreferences.DoesNotExist:
+			preference = None
+
+	
+		if preference:
 		#response.write("We have your preference stored")
-		interest1 = preference.interest1
-		interest2 = preference.interest2
-		interest3 = preference.interest3
-		interest4 = preference.interest4
+			interest1 = preference.interest1
+			interest2 = preference.interest2
+			interest3 = preference.interest3
+			interest4 = preference.interest4
 		
-		match1 = alumnipreferences.objects.filter(interest = interest1).values('id','department','interest')
-		match2 = alumnipreferences.objects.filter(interest = interest2).values('id','department','interest')
-		match3 = alumnipreferences.objects.filter(interest = interest3).values('id','department','interest')
-		match4 = alumnipreferences.objects.filter(interest = interest4).values('id','department','interest')
-		if match1:
-			for match in match1:
-				alum = alumni.objects.get(id = match['id'])
-				match['organization'] = alum.organization
-				match['designation'] = alum.designation
-				al1.append([match['id'],match['department'],match['interest'],match['organization'],match['designation']])
-		if match2:
-			for match in match2:
-				alum = alumni.objects.get(id = match['id'])
-				match['organization'] = alum.organization
-				match['designation'] = alum.designation
-				al2.append([match['id'],match['department'],match['interest'],match['organization'],match['designation']])
+			match1 = alumnipreferences.objects.filter(interest = interest1).values('id','department','interest')
+			match2 = alumnipreferences.objects.filter(interest = interest2).values('id','department','interest')
+			match3 = alumnipreferences.objects.filter(interest = interest3).values('id','department','interest')
+			match4 = alumnipreferences.objects.filter(interest = interest4).values('id','department','interest')
+			if match1:
+				for match in match1:
+					alum = alumni.objects.get(id = match['id'])
+					match['department'] = departments.objects.get(id=match['department']).department
+					match['interest'] = interest.objects.get(id=match['interest']).interest
+					match['organization'] = alum.organization
+					match['designation'] = alum.designation
+					al1.append([match['id'],match['department'],match['interest'],match['organization'],match['designation']])
+			if match2:
+				for match in match2:
+					alum = alumni.objects.get(id = match['id'])
+					match['department'] = departments.objects.get(id=match['department']).department
+					match['interest'] = interest.objects.get(id=match['interest']).interest
+					match['organization'] = alum.organization
+					match['designation'] = alum.designation
+					al2.append([match['id'],match['department'],match['interest'],match['organization'],match['designation']])
 
-		if match3:
-			for match in match3:
-				alum = alumni.objects.get(id = match['id'])
-				match['organization'] = alum.organization
-				match['designation'] = alum.designation
-				al3.append([match['id'],match['department'],match['interest'],match['organization'],match['designation']])
+			if match3:
+				for match in match3:
+					alum = alumni.objects.get(id = match['id'])
+					match['department'] = departments.objects.get(id=match['department']).department
+					match['interest'] = interest.objects.get(id=match['interest']).interest
+					match['organization'] = alum.organization
+					match['designation'] = alum.designation
+					al3.append([match['id'],match['department'],match['interest'],match['organization'],match['designation']])
 
-		if match4:
-			for match in match4:
-				alum = alumni.objects.get(id = match['id'])
-				match['organization'] = alum.organization
-				match['designation'] = alum.designation	
-				al4.append([match['id'],match['department'],match['interest'],match['organization'],match['designation']])
-		return render(request,'mentorlist.html',{'match1':al1,'match2':al2,'match3':al3,'match4':al4})
+			if match4:
+				for match in match4:
+					alum = alumni.objects.get(id = match['id'])
+					match['department'] = departments.objects.get(id=match['department']).department
+					match['interest'] = interest.objects.get(id=match['interest']).interest
+					match['organization'] = alum.organization
+					match['designation'] = alum.designation	
+					al4.append([match['id'],match['department'],match['interest'],match['organization'],match['designation']])
+			return render(request,'mentorlist.html',{'match1':al1,'match2':al2,'match3':al3,'match4':al4})
+		else:
+			response.write("Boo")
+			response.write(preference)
+		return response
+
 	else:
-		response.write("Boo")
-	return response
+		pass

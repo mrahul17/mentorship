@@ -38,7 +38,7 @@ class EditAlumniProfile(forms.Form):
 	for interesting in interest.objects.all().values():
 		list2.append(interesting.values())
 	department = forms.ChoiceField(choices = list1,widget=forms.Select(attrs={'class':'form-control','placeholder':'Your Department at IIT Kgp','autofocus':'autofocus'}),label='')
-	interest = forms.ChoiceField(choices = list2,widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Area you would like to give guidance about'}),label='')
+	interest = forms.ChoiceField(choices = list2,widget=forms.Select(attrs={'class':'form-control','placeholder':'Area you would like to give guidance about'}),label='')
 	noofmentees = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control','placeholder':'Number of Mentees'}),label='')
 	organization = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control','placeholder':'Company or organization'}),label='')
 	designation = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control','placeholder':'Designation'}),label='')
