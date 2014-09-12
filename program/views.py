@@ -75,6 +75,7 @@ def login(request):
 
 
 def register(request):
+	sent = ''
 	result = accessCheck(request)
 	if result==1:
  	   return HttpResponseRedirect("dashboard")
@@ -110,7 +111,7 @@ def register(request):
 						alumni1 = alumni(firstname = firstname,lastname = lastname,emailid = emailid,password = password,contactnumber = contactnumber)
 						alumni1.save()
 						alum = alumni.objects.all()
-						email(subject="Student Alumni Mentorship Program IIT Kharagpur",emailid=emailid,firstname=firstname,msg ="Thank you for regsitering as a mentor for the Student Alumni Mentorship Program. Your loginid is " +str(emailid)+" And your password is "+str(password))
+						sent = email(subject="Student Alumni Mentorship Program IIT Kharagpur",emailid=emailid,firstname=firstname,msg ="Thank you for regsitering as a mentor for the Student Alumni Mentorship Program. Your loginid is " +str(emailid)+" And your password is "+str(password))
 
 				elif member == 'student':
 					try:
@@ -123,10 +124,12 @@ def register(request):
 					else:	
 						student1 = students(firstname = firstname,lastname = lastname,emailid = emailid,password = password,contactnumber = contactnumber)
 						student1.save()
-						email(subject="Student Alumni Mentorship Program IIT Kharagpur",emailid=emailid,firstname=firstname,msg ="You have been regsitered for the Student Alumni Mentorship Program. Your loginid is " +str(emailid)+" And your password is "+str(password))
+						sent = email(subject="Student Alumni Mentorship Program IIT Kharagpur",emailid=emailid,firstname=firstname,msg ="You have been regsitered for the Student Alumni Mentorship Program. Your loginid is " +str(emailid)+" And your password is "+str(password))
 
-				
-				return render(request,'home.html',{'msg':'Congrats, You have successfully registered,you can login now.'})
+				if sent=="sent":
+					return render(request,'home.html',{'msg':'Congrats, You have successfully registered, a mail has been sent to the address you provided with the login credentials. You can login now.'})
+				else:
+					return render(request,'home.html',{'msg':'Your emailid appears to be incorrect. Please try registering again with a correct emailid.'})
 		else:	
 			errors = form.errors
 			return render(request,'register.html',{'form':form,'msg':"Please see the errors: ",'errors':errors})
@@ -330,7 +333,11 @@ def logout(request):
 	return HttpResponseRedirect("home")
 
 def email(subject,emailid,firstname,msg):
-	send_mail(subject,msg,'mentorship@adm.iitkgp.ernet.in',[emailid])
+	sent = send_mail(subject,msg,'mentorship@adm.iitkgp.ernet.in',[emailid])
+	if sent == 1:
+		return "sent"
+	else:
+		return "not sent"
 
 def selectmentor(request):
 	response = HttpResponse()
