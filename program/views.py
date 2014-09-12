@@ -56,7 +56,7 @@ def login(request):
 				request.session['id'] = userid1
 				request.session['firstname'] = firstname or "yo"
 				request.session['membertype'] = membertype
-				return showProfile(request)
+				return HttpResponseRedirect("dashboard")
 				
 				#return render(request,'profile.html',{'firstname':request.session['firstname'],'msg':response})
 				
@@ -322,7 +322,7 @@ def mentorlist(request,suggest="off"):
 
 def dashboard(request):
 	response = HttpResponse()
-	response.write('this is dasg')
+	response.write('this is dashboard')
 	return response
 
 def logout(request):
