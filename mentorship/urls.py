@@ -17,6 +17,7 @@ urlpatterns = patterns('',
     url(r'mentorlist',mentorlist),
     url(r'dashboard',dashboard),
     url(r'logout',logout),
-    url(r'selectmentor',selectmentor)
+    url(r'selectmentor',selectmentor),
+   # url(r'administrator',administrator)
     
 )

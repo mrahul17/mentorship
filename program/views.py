@@ -8,6 +8,7 @@ from program.forms import Login,Register
 from program.models import *
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
+from django.contrib.auth.hashers import make_password,check_password
 
 def home(request):
 	if 'firstname' not in request.session:
@@ -40,14 +41,22 @@ def login(request):
 			membertype = form.cleaned_data['member']
 			if membertype=='student':
 				try:
-					userid1 = students.objects.get(emailid = emailid).id
-					firstname = students.objects.get(emailid = emailid).firstname
+			
+					loggedstudent = students.objects.get(emailid = emailid)
+					userid1 = loggedstudent.id
+					firstname = loggedstudent.firstname
+					
+					if not check_password(password,loggedstudent.password):
+						userid1 = None
 				except students.DoesNotExist:
 					userid1 = None
 			elif membertype =='alumni':		
 				try:
-					userid1 = alumni.objects.get(emailid = emailid).id
-					firstname = alumni.objects.get(emailid = emailid).firstname
+					loggedalumni = alumni.objects.get(emailid = emailid)
+					userid1 = loggedalumni.id
+					firstname = loggedalumni.firstname
+					if not check_password(password,loggedalumni.password):
+						userid1 = None
 				except alumni.DoesNotExist:
 					userid1 = None
 
@@ -63,7 +72,7 @@ def login(request):
 				#return response
 			elif userid1==None:
 				
-				return render(request,'home.html',{'msg' :'Username Password combination incorrect'})
+				return render(request,'home.html',{'msg' :'Username Password combination incorrect for '+membertype})
 		else:
 			response.write('Error')	
 
@@ -88,11 +97,14 @@ def register(request):
 		form = Register(request.POST)
 		if form.is_valid():	
 			password = form.cleaned_data['password']
+			
 			repassword = form.cleaned_data['repassword']
 			if password!=repassword:
 				return render(request,'register.html',{'form':form,'msg':'Passwords do not match'})
 
 			else:	
+				rawpassword = password
+				password = make_password(password)
 				member = form.cleaned_data['member']
 				firstname = form.cleaned_data['firstname']
 				lastname = form.cleaned_data['lastname']
@@ -111,7 +123,7 @@ def register(request):
 						alumni1 = alumni(firstname = firstname,lastname = lastname,emailid = emailid,password = password,contactnumber = contactnumber)
 						alumni1.save()
 						alum = alumni.objects.all()
-						sent = email(subject="Student Alumni Mentorship Program IIT Kharagpur",emailid=emailid,firstname=firstname,msg ="Thank you for regsitering as a mentor for the Student Alumni Mentorship Program. Your loginid is " +str(emailid)+" And your password is "+str(password))
+						sent = email(subject="Student Alumni Mentorship Program IIT Kharagpur",emailid=emailid,firstname=firstname,msg ="Thank you for regsitering as a mentor for the Student Alumni Mentorship Program. Your loginid is " +str(emailid)+" And your password is "+str(rawpassword))
 
 				elif member == 'student':
 					try:
@@ -124,7 +136,7 @@ def register(request):
 					else:	
 						student1 = students(firstname = firstname,lastname = lastname,emailid = emailid,password = password,contactnumber = contactnumber)
 						student1.save()
-						sent = email(subject="Student Alumni Mentorship Program IIT Kharagpur",emailid=emailid,firstname=firstname,msg ="You have been regsitered for the Student Alumni Mentorship Program. Your loginid is " +str(emailid)+" And your password is "+str(password))
+						sent = email(subject="Student Alumni Mentorship Program IIT Kharagpur",emailid=emailid,firstname=firstname,msg ="You have been regsitered for the Student Alumni Mentorship Program. Your loginid is " +str(emailid)+" And your password is "+str(rawpassword))
 
 				if sent=="sent":
 					return render(request,'home.html',{'msg':'Congrats, You have successfully registered, a mail has been sent to the address you provided with the login credentials. You can login now.'})
@@ -322,7 +334,7 @@ def mentorlist(request,suggest="off"):
 
 def dashboard(request):
 	response = HttpResponse()
-	response.write('this is dashboard')
+	response.write('this is dashboard where you will see notifications regarding the program')
 	return response
 
 def logout(request):
@@ -364,3 +376,6 @@ def selectmentor(request):
  		preference.save()
  		
  	return HttpResponseRedirect("showProfile")
+
+def coordinator():
+	pass

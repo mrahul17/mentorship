@@ -85,8 +85,3 @@ STATIC_URL = '/static/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-EMAIL_USE_TLS = True
-EMAIL_HOST = '10.3.100.244'
-EMAIL_HOST_USER = 'mentorship@adm.iitkgp.ernet.in'
-EMAIL_HOST_PASSWORD = '12@mentorship12@'
-EMAIL_PORT = '587'

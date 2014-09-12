@@ -5,7 +5,7 @@ class alumni(models.Model):
 	lastname = models.CharField(max_length =100)
 	password = models.CharField(max_length = 100)
 	emailid = models.EmailField()
-	password = models.CharField(max_length =100)
+	password = models.CharField(max_length =128)
 	contactnumber = models.CharField(max_length =15)
 	organization = models.CharField(max_length=100)
 	designation = models.CharField(max_length=100)
@@ -15,7 +15,7 @@ class students(models.Model):
 	lastname = models.CharField(max_length =100)
 	password = models.CharField(max_length = 100)
 	emailid = models.EmailField()
-	password = models.CharField(max_length =100)
+	password = models.CharField(max_length =128)
 	contactnumber = models.CharField(max_length =15)
 
 class departments(models.Model):
@@ -46,3 +46,6 @@ class alumnipreferences(models.Model):
 	interest = models.ForeignKey(interest,related_name='alumnipreferences_interest')
 	noofmentees = models.IntegerField()
 	
+class coordinator(models.Model):
+	emailid = models.EmailField()
+	password = models.CharField(max_length = 128)
