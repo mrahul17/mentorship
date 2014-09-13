@@ -18,6 +18,6 @@ urlpatterns = patterns('',
     url(r'dashboard',dashboard),
     url(r'logout',logout),
     url(r'selectmentor',selectmentor),
-   # url(r'administrator',administrator)
+    url(r'coordinator',coordinator)
     
 )

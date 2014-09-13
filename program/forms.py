@@ -42,3 +42,9 @@ class EditAlumniProfile(forms.Form):
 	noofmentees = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control','placeholder':'Number of Mentees'}),label='')
 	organization = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control','placeholder':'Company or organization'}),label='')
 	designation = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control','placeholder':'Designation'}),label='')
+
+
+class coordinatorlogin(forms.Form):
+	emailid = forms.EmailField(widget=forms.EmailInput(attrs={'class':'form-control','placeholder':'Email Id','autofocus':'autofocus'}),label='')
+
+	password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Password'}),label='')

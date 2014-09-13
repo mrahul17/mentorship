@@ -4,7 +4,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.template import Context
 from django.template.loader import get_template
 from django.template.loader import render_to_string
-from program.forms import Login,Register
+from program.forms import Login,Register,coordinatorlogin
 from program.models import *
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
@@ -377,5 +377,19 @@ def selectmentor(request):
  		
  	return HttpResponseRedirect("showProfile")
 
-def coordinator():
-	pass
+def coordinator(request):
+	if request.method=="GET":
+		form = coordinatorlogin()
+		return render(request,'coordinatorlogin.html',{'form':form})
+	elif request.method =="POST":
+		response = HttpResponse()
+		form = coordinatorlogin(request.POST)
+		if (form.is_valid()):
+
+			username = form.cleaned_data['emailid']
+			password = form.cleaned_data['password']
+			coordinator = coordinators.objects.get(emailid=username)
+			if check_password(password,coordinator.password):
+				return render(request,'coordinator.html',{'msg':'coordinator Page'})
+			else:
+				return render(request,'coordinatorlogin.html',{'form':form,'msg':"Incorrect username password combination"})	

@@ -46,6 +46,6 @@ class alumnipreferences(models.Model):
 	interest = models.ForeignKey(interest,related_name='alumnipreferences_interest')
 	noofmentees = models.IntegerField()
 	
-class coordinator(models.Model):
+class coordinators(models.Model):
 	emailid = models.EmailField()
 	password = models.CharField(max_length = 128)
