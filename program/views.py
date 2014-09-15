@@ -177,6 +177,7 @@ def editProfile(request):
 				interest2 = interest.objects.get(id = form.cleaned_data['interest2'])
 				interest3 = interest.objects.get(id = form.cleaned_data['interest3'])
 				interest4 = interest.objects.get(id = form.cleaned_data['interest4'])
+				rollnumber = form.cleaned_data['rollnumber']
 				interestlist = [interest1,interest2,interest3,interest4]
 				if len(interestlist)!=len(set(interestlist)):
 					try:	
@@ -191,15 +192,19 @@ def editProfile(request):
 				obj = students.objects.get(id = request.session['id'])
 				try:
 					preference = studentpreferences.objects.get(id = obj)
-					preference.department = department
+					obj.rollnumber = rollnumber
+					obj.department = department
 					preference.interest1 = interest1
 					preference.interest2 = interest2
 					preference.interest3 = interest3
 					preference.interest4 = interest4
-					preference.cgpa = cgpa
+					obj.cgpa = cgpa
 					preference.save()
+					obj.save()
 				except studentpreferences.DoesNotExist:
-					preference = studentpreferences(id =obj, department=department,cgpa=cgpa,interest1=interest1,interest2=interest2,interest3=interest3,interest4=interest4) 
+					preference = studentpreferences(id =obj,interest1=interest1,interest2=interest2,interest3=interest3,interest4=interest4) 
+					students.objects.filter(id = request.session['id']).update(cgpa = cgpa,department = department)
+
 					preference.save()
 				return render(request,'home.html',{'firstname':request.session['firstname'],'msg':'Your preferences have been updated.'})
 			else:
@@ -213,18 +218,18 @@ def editProfile(request):
 				noofmentees = form.cleaned_data['noofmentees']	
 				organization = form.cleaned_data['organization']
 				designation = form.cleaned_data['designation']	
+				batch = form.cleaned_data['batch']
 				obj = alumni.objects.get(id = request.session['id'])
 				try:
 					preference = alumnipreferences.objects.get(id=obj)
-					preference.department = department
 					preference.interest = interest
 					preference.noofmentees = noofmentees
 					preference.save()
 				except alumnipreferences.DoesNotExist:
-					preference = alumnipreferences(id =obj, department=department,interest=interest,noofmentees = noofmentees) 
+					preference = alumnipreferences(id =obj,interest=interest,noofmentees = noofmentees) 
 					preference.save()
 					
-				alumni.objects.filter(id = request.session['id']).update(designation = designation,organization=organization)
+				alumni.objects.filter(id = request.session['id']).update(designation = designation,organization=organization,batch = batch,department = department)
 
 				return render(request,'home.html',{'firstname':request.session['firstname'],'msg':'Your preferences have been updated.'})
 			else:

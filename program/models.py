@@ -2,7 +2,7 @@ from django.db import models
 
 class departments(models.Model):
 	department = models.CharField(max_length=100) 
-	
+
 class alumni(models.Model):
 	firstname = models.CharField(max_length =100)
 	lastname = models.CharField(max_length =100)
@@ -23,7 +23,8 @@ class students(models.Model):
 	password = models.CharField(max_length =128)
 	contactnumber = models.CharField(max_length =15)
 	rollnumber = models.CharField(max_length=20)
-
+	department = models.ForeignKey(departments)
+	cgpa = models.DecimalField(max_digits = 3,decimal_places=2)
 
 
 class interest(models.Model):
@@ -31,8 +32,6 @@ class interest(models.Model):
 
 class studentpreferences(models.Model):
 	id = models.ForeignKey(students,primary_key = True)
-	department = models.ForeignKey(departments)
-	cgpa = models.DecimalField(max_digits = 3,decimal_places=2)
 	interest1 = models.ForeignKey(interest,related_name = 'studentpreferences_interest1',null = True)
 	interest2 = models.ForeignKey(interest,related_name = 'studentpreferences_interest2',null = True)
 	interest3 = models.ForeignKey(interest,related_name = 'studentpreferences_interest3',null = True)

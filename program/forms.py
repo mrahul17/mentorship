@@ -25,10 +25,13 @@ class EditStudentProfile(forms.Form):
 		list2.append(interesting.values())
 	department = forms.ChoiceField(choices =list1 ,widget=forms.Select(attrs={'class':'form-control','placeholder':'Department','autofocus':'autofocus'}),label='')
 	cgpa = forms.DecimalField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'CGPA'}),label='')
+	rollnumber = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control','placeholder':'Roll Number'}),label='')
+
 	interest1 = forms.ChoiceField(choices =list2 ,widget=forms.Select(attrs={'class':'form-control','placeholder':'1st Interest'}),label='')
 	interest2 = forms.ChoiceField(choices =list2 ,widget=forms.Select(attrs={'class':'form-control','placeholder':'2nd Interest'}),label='')
 	interest3 = forms.ChoiceField(choices =list2 ,widget=forms.Select(attrs={'class':'form-control','placeholder':'3rd Interest'}),label='')
 	interest4 = forms.ChoiceField(choices =list2 ,widget=forms.Select(attrs={'class':'form-control','placeholder':'4th Interest'}),label='')
+
 
 class EditAlumniProfile(forms.Form):
 	list1 = []
@@ -38,6 +41,8 @@ class EditAlumniProfile(forms.Form):
 	for interesting in interest.objects.all().values():
 		list2.append(interesting.values())
 	department = forms.ChoiceField(choices = list1,widget=forms.Select(attrs={'class':'form-control','placeholder':'Your Department at IIT Kgp','autofocus':'autofocus'}),label='')
+	batch = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control','placeholder':'Year of Passing'}),label='')
+
 	interest = forms.ChoiceField(choices = list2,widget=forms.Select(attrs={'class':'form-control','placeholder':'Area you would like to give guidance about'}),label='')
 	noofmentees = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control','placeholder':'Number of Mentees'}),label='')
 	organization = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control','placeholder':'Company or organization'}),label='')
