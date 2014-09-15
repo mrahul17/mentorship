@@ -390,6 +390,16 @@ def coordinator(request):
 			password = form.cleaned_data['password']
 			coordinator = coordinators.objects.get(emailid=username)
 			if check_password(password,coordinator.password):
+				request.session['firstname'] = "coordinator"
+				request.session['membertype']="admin"
 				return render(request,'coordinator.html',{'msg':'coordinator Page'})
 			else:
 				return render(request,'coordinatorlogin.html',{'form':form,'msg':"Incorrect username password combination"})	
+
+
+def allot(request):
+	if not request.session['membertype']=="admin":
+		return HttpResponseRedirect('login')
+	else:
+		pass
+		#count number of records in students model

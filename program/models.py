@@ -1,5 +1,8 @@
 from django.db import models
 
+class departments(models.Model):
+	department = models.CharField(max_length=100) 
+	
 class alumni(models.Model):
 	firstname = models.CharField(max_length =100)
 	lastname = models.CharField(max_length =100)
@@ -8,6 +11,8 @@ class alumni(models.Model):
 	password = models.CharField(max_length =128)
 	contactnumber = models.CharField(max_length =15)
 	organization = models.CharField(max_length=100)
+	department = models.ForeignKey(departments,related_name='alumnipreferences_department')
+	batch = models.CharField(max_length=10)	
 	designation = models.CharField(max_length=100)
 
 class students(models.Model):
@@ -17,9 +22,9 @@ class students(models.Model):
 	emailid = models.EmailField()
 	password = models.CharField(max_length =128)
 	contactnumber = models.CharField(max_length =15)
+	rollnumber = models.CharField(max_length=20)
 
-class departments(models.Model):
-	department = models.CharField(max_length=100) 
+
 
 class interest(models.Model):
 	interest = models.CharField(max_length = 100)	
@@ -41,8 +46,6 @@ class studentpreferences(models.Model):
 
 class alumnipreferences(models.Model):
 	id = models.ForeignKey(alumni,primary_key = True)
-
-	department = models.ForeignKey(departments,related_name='alumnipreferences_department')
 	interest = models.ForeignKey(interest,related_name='alumnipreferences_interest')
 	noofmentees = models.IntegerField()
 	
