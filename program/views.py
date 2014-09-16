@@ -408,3 +408,20 @@ def allot(request):
 	else:
 		pass
 		#count number of records in students model
+
+def showlist(request,member):
+
+	if member=='mentee':
+		menteelist = students.objects.all().values() 
+		list1 = []
+		for mentee in menteelist:
+			list1.append([mentee['id'],mentee['firstname'],mentee['lastname']])
+		return render(request,'list.html',{'list':list1})
+	elif member=='mentor':
+		mentorlist = alumni.objects.all().values()
+		list2 = []
+		for mentee in mentorlist:
+			list2.append([mentor['id'],mentor['firstname'],mentor['lastname']])
+		return render(request,'list.html',{'list':list2})
+	else:
+		pass

@@ -8,7 +8,7 @@
 	{{msg}}
 	{% endif %}
 	
-<form action="coordinator" method="POST">{% csrf_token %}
+<form action="" method="POST">{% csrf_token %}
 	{{ form.as_p }}
 	<input type="submit" value="Login" name="Submit" class="btn btn-success">
 </form>
