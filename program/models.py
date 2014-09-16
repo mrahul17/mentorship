@@ -10,10 +10,10 @@ class alumni(models.Model):
 	emailid = models.EmailField()
 	password = models.CharField(max_length =128)
 	contactnumber = models.CharField(max_length =15)
-	organization = models.CharField(max_length=100)
-	department = models.ForeignKey(departments,related_name='alumnipreferences_department')
-	batch = models.CharField(max_length=10)	
-	designation = models.CharField(max_length=100)
+	organization = models.CharField(max_length=100,null = True)
+	department = models.ForeignKey(departments,related_name='alumnipreferences_department',null = True)
+	batch = models.CharField(max_length=10,null = True)	
+	designation = models.CharField(max_length=100,null = True)
 
 class students(models.Model):
 	firstname = models.CharField(max_length =100)
@@ -23,8 +23,8 @@ class students(models.Model):
 	password = models.CharField(max_length =128)
 	contactnumber = models.CharField(max_length =15)
 	rollnumber = models.CharField(max_length=20)
-	department = models.ForeignKey(departments)
-	cgpa = models.DecimalField(max_digits = 3,decimal_places=2)
+	department = models.ForeignKey(departments,null = True)
+	cgpa = models.DecimalField(max_digits = 3,decimal_places=2,null = True)
 
 
 class interest(models.Model):
