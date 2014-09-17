@@ -1,16 +1,17 @@
 {% include "includes/head.html" %}
 {{menteelist}}
 {% if not list %}
+
 <h3>Nothing to see here,move along</h3>
 {% endif %}
+
 {% if list %}
+
 <table class="table table-striped">
-	<tr><th>Member Id</th><th>First Name</th><th> Last Name</th><th></th></tr>
+	<tr><th>Member Id</th><th>First Name</th><th> Last Name</th><th>Roll Number</th><th></th></tr>
 {% for mentee in list %}
 	<tr>
-		{% for item in mentee%}
-			<td>{{item}}</td>
-		{% endfor %}
+		
 		<td><a href="../coordinator/profile/" class="btn btn-primary">View Profile</a></td>
 	</tr>
 	
