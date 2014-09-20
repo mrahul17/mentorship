@@ -1,11 +1,11 @@
 {% include "includes/head.html" %}
-{{menteelist}}
+
 {% if not list %}
 
 <h3>Nothing to see here,move along</h3>
 {% endif %}
 
-{% if list %}
+{% if member == "mentee" %}
 {% load mentorship_extra %}
 <table class="table table-striped">
 	<tr><th>Member Id</th><th>First Name</th><th> Last Name</th><th>Roll Number</th><th></th></tr>
@@ -15,6 +15,24 @@
 		<td>{{ mentee|get_item:"firstname" }}</td>
 		<td>{{ mentee|get_item:"lastname" }}</td>
 		<td>{{ mentee|get_item:"rollnumber" }} </td>
+		<td><a href="../coordinator/profile/" class="btn btn-primary">View Profile</a></td>
+	</tr>
+	
+	
+{% endfor %}
+{% endif %}
+{% if member == "mentor" %}
+{% load mentorship_extra %}
+<table class="table table-striped">
+	<tr><th>Member Id</th><th>First Name</th><th> Last Name</th><th>Organization</th><th>Designation</th><th></th></tr>
+{% for mentee in list %}
+	<tr>
+		<td>{{ mentee|get_item:"id" }}</td>
+		<td>{{ mentee|get_item:"firstname" }}</td>
+		<td>{{ mentee|get_item:"lastname" }}</td>
+		<td>{{ mentee|get_item:"organization" }} </td>
+		<td>{{ mentee|get_item:"designation" }} </td>
+
 		<td><a href="../coordinator/profile/" class="btn btn-primary">View Profile</a></td>
 	</tr>
 	

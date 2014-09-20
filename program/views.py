@@ -417,13 +417,10 @@ def showlist(request,member):
 
 	if member=='mentee':
 		menteelist = students.objects.all().values() 
-		return render(request,'list.html',{'list':menteelist})
+		return render(request,'list.html',{'member':'mentee','list':menteelist})
 	elif member=='mentor':
 		mentorlist = alumni.objects.all().values()
-		list2 = []
-		for mentee in mentorlist:
-			list2.append([mentor['id'],mentor['firstname'],mentor['lastname']])
-		return render(request,'list.html',{'list':list2})
+		return render(request,'list.html',{'member':'mentor','list':mentorlist})
 	else:
 		pass
 
