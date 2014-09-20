@@ -13,6 +13,10 @@ from django.contrib.auth.hashers import make_password,check_password
 def home(request):
 	if 'firstname' not in request.session:
 		request.session['firstname'] = "Guest"
+	elif request.session['firstname']=="coordinator":
+		return HttpResponseRedirect('coordinatordashboard')
+
+
 	return render(request,'home.html',{'firstname':request.session['firstname']})
 
 def accessCheck(request):
@@ -395,11 +399,9 @@ def coordinator(request):
 			password = form.cleaned_data['password']
 			coordinator = coordinators.objects.get(emailid=username)
 			if check_password(password,coordinator.password):
-				request.session['firstname'] = "coordinator"
-				request.session['membertype']="admin"
-				studentregistrations = students.objects.count()
-				alumniregistrations = alumni.objects.count()
-				return render(request,'coordinator.html',{'msg':'','studentregistrations':studentregistrations,'alumniregistrations':alumniregistrations})
+
+				return HttpResponseRedirect('coordinatordashboard')
+				
 			else:
 				return render(request,'coordinatorlogin.html',{'form':form,'msg':"Incorrect username password combination"})	
 
@@ -424,3 +426,10 @@ def showlist(request,member):
 		return render(request,'list.html',{'list':list2})
 	else:
 		pass
+
+def coordinatordashboard(request):
+	request.session['firstname'] = "coordinator"
+	request.session['membertype']="admin"
+	studentregistrations = students.objects.count()
+	alumniregistrations = alumni.objects.count()
+	return render(request,'coordinator.html',{'msg':'','studentregistrations':studentregistrations,'alumniregistrations':alumniregistrations})

@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     url(r'^logout',logout),
     url(r'^selectmentor',selectmentor),
     url(r'^coordinator$',coordinator),
-    url(r'^coordinator/list/(mentee|mentor)',showlist)
+    url(r'^coordinator/list/(mentee|mentor)',showlist),
+    url(r'^coordinatordashboard$',coordinatordashboard),
     
 )
