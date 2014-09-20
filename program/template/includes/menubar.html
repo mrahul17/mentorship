@@ -6,7 +6,11 @@
 	<li><a href="mentorlist">List of Mentors</a></li>
 	<li><a href="logout">Logout</a></li>
 	<!--add other things here -->
-	<li><a hre="#">Logged in as {{firstname}}</a></li>
+	<li><a hre="#">Logged in as {{request.session.firstname}}</a></li>
+	{% endif %}
+	{% if firstname and firstname == "coordinator" %}
+
+	<li><a href="logout">Logout</a></li>
 	{% endif %}
 	
 

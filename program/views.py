@@ -17,7 +17,7 @@ def home(request):
 		return HttpResponseRedirect('coordinatordashboard')
 
 
-	return render(request,'home.html',{'firstname':request.session['firstname']})
+	return render(request,'home.html',{'':''})
 
 def accessCheck(request):
 	if 'id' not in request.session:
@@ -171,7 +171,7 @@ def editProfile(request):
 			form = EditAlumniProfile({'department':filleddata.department.id,'interest':filleddata.interest.id,'noofmentees':filleddata.noofmentees,'organization':filleddata2.organization,'designation':filleddata2.designation})
 		except alumnipreferences.DoesNotExist:
 			form = EditAlumniProfile()
-		return render(request,'editProfile.html',{'firstname':request.session['firstname'],'form':form,'msg':''})
+		return render(request,'editProfile.html',{'form':form,'msg':''})
 
 	else:
 		if request.session['membertype']=='student':
@@ -189,7 +189,7 @@ def editProfile(request):
 						form = EditStudentProfile({'department':filleddata.department.id,'cgpa':filleddata.cgpa,'interest1':filleddata.interest1.id,'interest2':filleddata.interest2.id,'interest3':filleddata.interest3.id,'interest4':filleddata.interest4.id})
 					except studentpreferences.DoesNotExist:
 						form = EditStudentProfile()
-					return render(request,'editProfile.html',{'firstname':request.session['firstname'],'form':form,'msg':'You have to specify different interest or leave it blank'})
+					return render(request,'editProfile.html',{'form':form,'msg':'You have to specify different interest or leave it blank'})
 
 				department = departments.objects.get(id =form.cleaned_data['department'])
 				cgpa = form.cleaned_data['cgpa']
@@ -210,10 +210,10 @@ def editProfile(request):
 					students.objects.filter(id = request.session['id']).update(cgpa = cgpa,department = department)
 
 					preference.save()
-				return render(request,'home.html',{'firstname':request.session['firstname'],'msg':'Your preferences have been updated.'})
+				return render(request,'home.html',{'msg':'Your preferences have been updated.'})
 			else:
 				errors = form.errors
-				return render(request,'editProfile.html',{'firstname':request.session['firstname'],'form':form,'msg':'Please see the errors','errors':errors })
+				return render(request,'editProfile.html',{'form':form,'msg':'Please see the errors','errors':errors })
 		else:
 			form = EditAlumniProfile(request.POST)
 			if form.is_valid():	
@@ -235,10 +235,10 @@ def editProfile(request):
 					
 				alumni.objects.filter(id = request.session['id']).update(designation = designation,organization=organization,batch = batch,department = department)
 
-				return render(request,'home.html',{'firstname':request.session['firstname'],'msg':'Your preferences have been updated.'})
+				return render(request,'home.html',{'msg':'Your preferences have been updated.'})
 			else:
 				errors = form.errors
-				return render(request,'editProfile.html',{'firstname':request.session['firstname'],'form':form,'msg':'Please see the errors','errors':errors })
+				return render(request,'editProfile.html',{'form':form,'msg':'Please see the errors','errors':errors })
 
 def showProfile(request):
 	result = accessCheck(request)
@@ -253,9 +253,9 @@ def showProfile(request):
 		except studentpreferences.DoesNotExist:
 			from program.forms import EditStudentProfile
 			form = EditStudentProfile()
-			return render(request,'editProfile.html',{'firstname':request.session['firstname'],'form':form})
+			return render(request,'editProfile.html',{'form':form})
 		
-		return render(request,'profile.html',{'preferences':preferences,'msg':'','membertype':membertype,'firstname':request.session['firstname']})
+		return render(request,'profile.html',{'preferences':preferences,'msg':'','membertype':membertype})
 
 	elif membertype=='alumni':
 		try:
@@ -263,9 +263,9 @@ def showProfile(request):
 		except alumnipreferences.DoesNotExist:
 			from program.forms import EditAlumniProfile
 			form = EditAlumniProfile()
-			return render(request,'editProfile.html',{'firstname':request.session['firstname'],'form':form})
+			return render(request,'editProfile.html',{'form':form})
 		
-		return render(request,'profile.html',{'preferences':preferences,'msg':'','membertype':membertype,'firstname':request.session['firstname']})
+		return render(request,'profile.html',{'preferences':preferences,'msg':'','membertype':membertype})
 
 def mentorlist(request,suggest="off"):
 	result = accessCheck(request)
@@ -333,10 +333,10 @@ def mentorlist(request,suggest="off"):
 					match['organization'] = alum.organization
 					match['designation'] = alum.designation	
 					al4.append([match['id'],match['department'],match['interest'],match['organization'],match['designation']])
-			return render(request,'mentorlist.html',{'firstname':request.session['firstname'],'match1':al1,'match2':al2,'match3':al3,'match4':al4})
+			return render(request,'mentorlist.html',{'match1':al1,'match2':al2,'match3':al3,'match4':al4})
 		else:
 			
-			return render(request,'mentorlist.html',{'firstname':request.session['firstname'],'msg':'Sorry, we have no mentors with matching preferences'})
+			return render(request,'mentorlist.html',{'msg':'Sorry, we have no mentors with matching preferences'})
 
 	else:
 		pass
@@ -427,6 +427,7 @@ def showlist(request,member):
 def coordinatordashboard(request):
 	request.session['firstname'] = "coordinator"
 	request.session['membertype']="admin"
+	request.session['id']=0
 	studentregistrations = students.objects.count()
 	alumniregistrations = alumni.objects.count()
 	return render(request,'coordinator.html',{'msg':'','studentregistrations':studentregistrations,'alumniregistrations':alumniregistrations})
