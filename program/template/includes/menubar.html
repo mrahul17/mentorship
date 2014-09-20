@@ -1,7 +1,7 @@
 <ul class="nav nav-pills">
 
 	<li><a href="home">Home</a></li>
-	{% if request.session.firstname and request.session.firstname and request.session.firstname %}
+	{% if request.session.firstname and request.session.firstname != "Guest" and request.session.firstname != "coordinator" %}
 	<li><a href="showProfile">ShowProfile</a></li>
 	<li><a href="mentorlist">List of Mentors</a></li>
 	<li><a href="logout">Logout</a></li>
