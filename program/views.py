@@ -397,7 +397,9 @@ def coordinator(request):
 			if check_password(password,coordinator.password):
 				request.session['firstname'] = "coordinator"
 				request.session['membertype']="admin"
-				return render(request,'coordinator.html',{'msg':'coordinator Page'})
+				studentregistrations = students.objects.count()
+				alumniregistrations = alumni.objects.count()
+				return render(request,'coordinator.html',{'msg':'','studentregistrations':studentregistrations,'alumniregistrations':alumniregistrations})
 			else:
 				return render(request,'coordinatorlogin.html',{'form':form,'msg':"Incorrect username password combination"})	
 
