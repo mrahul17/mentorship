@@ -411,6 +411,7 @@ def allot(request):
 		return HttpResponseRedirect('login')
 	else:
 		pass
+		# the algo for allotment will be here .. no more use of excel file
 		#count number of records in students model
 
 def showlist(request,member):
@@ -425,9 +426,12 @@ def showlist(request,member):
 		pass
 
 def coordinatordashboard(request):
-	request.session['firstname'] = "coordinator"
-	request.session['membertype']="admin"
-	request.session['id']=0
-	studentregistrations = students.objects.count()
-	alumniregistrations = alumni.objects.count()
-	return render(request,'coordinator.html',{'msg':'','studentregistrations':studentregistrations,'alumniregistrations':alumniregistrations})
+	if not request.session['membertype']=="admin":
+		return HttpResponseRedirect('login')
+	else:
+		request.session['firstname'] = "coordinator"
+		request.session['membertype']="admin"
+		request.session['id']=0
+		studentregistrations = students.objects.count()
+		alumniregistrations = alumni.objects.count()
+		return render(request,'coordinator.html',{'msg':'','studentregistrations':studentregistrations,'alumniregistrations':alumniregistrations})
