@@ -13,9 +13,6 @@ from django.contrib.auth.hashers import make_password,check_password
 def home(request):
 	if 'firstname' not in request.session:
 		request.session['firstname'] = "Guest"
-	elif request.session['firstname']=="coordinator":
-		return HttpResponseRedirect('coordinatordashboard')
-
 
 	return render(request,'home.html',{'':''})
 
