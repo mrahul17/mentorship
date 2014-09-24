@@ -2,15 +2,15 @@
 <div  class="col-md-10">
 <ul class="nav nav-pills">
 
-	<li><a href="home">Home</a></li>
-	{% if request.session.firstname and request.session.firstname != "Guest" %}
+	<li ><a href="home">Home</a></li>
+	{% if request.session.firstname and request.session.firstname != "Guest" and request.session.membertype != "admin" %}
 	<li><a href="dashboard">Dashboard</a></li>
 	<li><a href="logout">Logout</a></li>
 	<!--add other things here -->
 	
 	{% endif %}
-	{% if firstname == "coordinator" %}
-
+	{% if request.session.firstname == "coordinator" %}
+	<li><a href="coordinatordashboard">Dashboard</a></li>
 	<li><a href="logout">Logout</a></li>
 	{% endif %}
 	
