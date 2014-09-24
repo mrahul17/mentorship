@@ -43,7 +43,7 @@ def login(request):
 			emailid = form.cleaned_data['emailid']
 			password = form.cleaned_data['password']
 			membertype = form.cleaned_data['member']
-			if membertype=='student':
+			if membertype=='mentee':
 				try:
 			
 					loggedstudent = students.objects.get(emailid = emailid)
@@ -54,7 +54,7 @@ def login(request):
 						userid1 = None
 				except students.DoesNotExist:
 					userid1 = None
-			elif membertype =='alumni':		
+			elif membertype =='mentor':		
 				try:
 					loggedalumni = alumni.objects.get(emailid = emailid)
 					userid1 = loggedalumni.id
@@ -157,14 +157,14 @@ def editProfile(request):
 	from program.forms import EditStudentProfile, EditAlumniProfile
 	from program.models import interest
 	form = ''
-	if request.method=='GET' and request.session['membertype']=="student":
+	if request.method=='GET' and request.session['membertype']=="mentee":
 		try:
 			filleddata = studentpreferences.objects.get(id = students.objects.get(id = request.session['id']))
 			form = EditStudentProfile({'department':filleddata.department.id,'cgpa':filleddata.cgpa,'interest1':filleddata.interest1.id,'interest2':filleddata.interest2.id,'interest3':filleddata.interest3.id,'interest4':filleddata.interest4.id})
 		except studentpreferences.DoesNotExist:
 			form = EditStudentProfile()
 		return render(request,'editProfile.html',{'firstname':request.session['firstname'],'form':form,'msg':''})
-	if request.method=='GET' and request.session['membertype']=="alumni":
+	if request.method=='GET' and request.session['membertype']=="mentor":
 		try:
 			filleddata = alumnipreferences.objects.get(id = alumni.objects.get(id = request.session['id']))
 			filleddata2 = alumni.objects.get(id=request.session['id'])
@@ -174,7 +174,7 @@ def editProfile(request):
 		return render(request,'editProfile.html',{'form':form,'msg':''})
 
 	else:
-		if request.session['membertype']=='student':
+		if request.session['membertype']=='mentee':
 			form = EditStudentProfile(request.POST)
 			if form.is_valid():	
 				interest1 = interest.objects.get(id = form.cleaned_data['interest1'])
@@ -247,7 +247,7 @@ def showProfile(request):
 	userid1 = request.session['id']
 	membertype = request.session['membertype']
 	preferences = {}
-	if membertype=='student':
+	if membertype=='mentee':
 		try:
 			preferences = studentpreferences.objects.get(id = userid1)
 		except studentpreferences.DoesNotExist:
@@ -257,7 +257,7 @@ def showProfile(request):
 		
 		return render(request,'profile.html',{'preferences':preferences,'msg':'','membertype':membertype})
 
-	elif membertype=='alumni':
+	elif membertype=='mentor':
 		try:
 			preferences = alumnipreferences.objects.get(id = userid1)
 		except alumnipreferences.DoesNotExist:
@@ -343,9 +343,9 @@ def mentorlist(request,suggest="off"):
 
 def dashboard(request):
 	#response.write('this is dashboard where you will see notifications regarding the program')
-	if request.session['membertype']=="student":
+	if request.session['membertype']=="mentee":
 		return render(request,'mentee.html',{'':''}) 
-	if request.session['membertype']=="alumni":
+	if request.session['membertype']=="mentor":
 		return render(request,'mentor.html',{'',''})
 
 def logout(request):
@@ -442,6 +442,7 @@ def showprofilecoordinator(request,member,id):
 	if not request.session['membertype']=="admin":
 		return HttpResponseRedirect('login')
 	else:
+		if member == "mentee"
 		response = HttpResponse()
 		response.write("Yay")
 		return response

@@ -4,7 +4,7 @@ from program.models import *
 class Login(forms.Form):
 	emailid = forms.EmailField(widget=forms.EmailInput(attrs={'class':'form-control','placeholder':'Email Id','autofocus':'autofocus'}),label='')
 	password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Password'}),label='')
-	member = forms.ChoiceField(choices=[('student','student'),('alumni','alumni')],widget = forms.Select(attrs={'placeholder':'Login as','class':'form-control'}),label='')
+	member = forms.ChoiceField(choices=[('Student','mentee'),('Alumni','mentor')],widget = forms.Select(attrs={'placeholder':'Login as','class':'form-control'}),label='')
 
 class Register(forms.Form):
 
@@ -14,7 +14,7 @@ class Register(forms.Form):
 	password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Password'}),label='')
 	repassword = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Retype Password'}),label='')
 	contactnumber = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control','placeholder':'Contact Number'}),label='')
-	member = forms.ChoiceField(choices=[('student','student'),('alumni','alumni')],widget = forms.Select(attrs={'placeholder':'Register as','class':'form-control'}),label='')
+	member = forms.ChoiceField(choices=[('Student','mentee'),('Alumni','mentor')],widget = forms.Select(attrs={'placeholder':'Register as','class':'form-control'}),label='')
 
 class EditStudentProfile(forms.Form):
 	list1 = []
