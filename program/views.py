@@ -347,7 +347,7 @@ def dashboard(request):
 		return render(request,'mentee.html',{'':''}) 
 	if request.session['membertype']=="alumni":
 		return render(request,'mentor.html',{'',''})
-		
+
 def logout(request):
 	result = accessCheck(request)
 	if result==0:
@@ -401,7 +401,9 @@ def coordinator(request):
 			password = form.cleaned_data['password']
 			coordinator = coordinators.objects.get(emailid=username)
 			if check_password(password,coordinator.password):
-
+				request.session['firstname'] = "coordinator"
+				request.session['membertype']="admin"
+				request.session['id']=0
 				return HttpResponseRedirect('coordinatordashboard')
 				
 			else:
@@ -431,9 +433,7 @@ def coordinatordashboard(request):
 	if not request.session['membertype']=="admin":
 		return HttpResponseRedirect('login')
 	else:
-		request.session['firstname'] = "coordinator"
-		request.session['membertype']="admin"
-		request.session['id']=0
+	
 		studentregistrations = students.objects.count()
 		alumniregistrations = alumni.objects.count()
 		return render(request,'coordinator.html',{'msg':'','studentregistrations':studentregistrations,'alumniregistrations':alumniregistrations})
