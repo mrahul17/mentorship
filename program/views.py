@@ -437,3 +437,11 @@ def coordinatordashboard(request):
 		studentregistrations = students.objects.count()
 		alumniregistrations = alumni.objects.count()
 		return render(request,'coordinator.html',{'msg':'','studentregistrations':studentregistrations,'alumniregistrations':alumniregistrations})
+
+def showprofilecoordinator(request,member,id):
+	if not request.session['membertype']=="admin":
+		return HttpResponseRedirect('login')
+	else:
+		response = HttpResponse()
+		response.write("Yay")
+		return response

@@ -21,5 +21,5 @@ urlpatterns = patterns('',
     url(r'^coordinator$',coordinator),
     url(r'^coordinator/list/(mentee|mentor)',showlist),
     url(r'^coordinatordashboard$',coordinatordashboard),
-    
+    url(r'^coordinator/profile/(mentee|mentor)/([0-1000])',showprofilecoordinator),
 )

@@ -15,7 +15,7 @@
 		<td>{{ mentee|get_item:"firstname" }}</td>
 		<td>{{ mentee|get_item:"lastname" }}</td>
 		<td>{{ mentee|get_item:"rollnumber" }} </td>
-		<td><a href="../coordinator/profile/{{ mentee|get_item:'id' }}" class="btn btn-primary">View Profile</a></td>
+		<td><a href="../profile/mentee/{{ mentee|get_item:'id' }}" class="btn btn-primary">View Profile</a></td>
 	</tr>
 	
 	
@@ -33,7 +33,7 @@
 		<td>{{ mentor|get_item:"organization" }} </td>
 		<td>{{ mentor|get_item:"designation" }} </td>
 
-		<td><a href="../coordinator/profile/{{ mentor|get_item:'id' }}" class="btn btn-primary">View Profile</a></td>
+		<td><a href="../profile/mentor/{{ mentor|get_item:'id' }}" class="btn btn-primary">View Profile</a></td>
 	</tr>
 	
 	
