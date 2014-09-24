@@ -1,12 +1,13 @@
+<div class="row">
+<div  class="col-md-10">
 <ul class="nav nav-pills">
 
 	<li><a href="home">Home</a></li>
-	{% if request.session.firstname and request.session.firstname != "Guest" and request.session.firstname != "coordinator" %}
-	<li><a href="showProfile">ShowProfile</a></li>
-	<li><a href="mentorlist">List of Mentors</a></li>
+	{% if request.session.firstname and request.session.firstname != "Guest" %}
+	<li><a href="dashboard">Dashboard</a></li>
 	<li><a href="logout">Logout</a></li>
 	<!--add other things here -->
-	<li><a hre="#">Logged in as {{request.session.firstname}}</a></li>
+	
 	{% endif %}
 	{% if firstname == "coordinator" %}
 
@@ -15,3 +16,9 @@
 	
 
 </ul>
+</div>
+<div class="col-md-2">
+<a hre="#">Logged in as {{request.session.firstname}}</a>
+
+</div>
+</div>

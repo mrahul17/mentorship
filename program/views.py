@@ -342,10 +342,12 @@ def mentorlist(request,suggest="off"):
 		pass
 
 def dashboard(request):
-	response = HttpResponse()
-	response.write('this is dashboard where you will see notifications regarding the program')
-	return response
-
+	#response.write('this is dashboard where you will see notifications regarding the program')
+	if request.session['membertype']=="student":
+		return render(request,'mentee.html',{'':''}) 
+	if request.session['membertype']=="alumni":
+		return render(request,'mentor.html',{'',''})
+		
 def logout(request):
 	result = accessCheck(request)
 	if result==0:
