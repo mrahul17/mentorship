@@ -72,8 +72,8 @@ def login(request):
 				
 				#return response
 			elif userid1==None:
-				
-				return render(request,'home.html',{'msg' :'Username Password combination incorrect for '+membertype})
+				form = Login()
+				return render(request,'login.html',{'form':form,'msg':'Username Password Combination Incorrect'})
 		else:
 			response.write('Error')	
 
@@ -439,6 +439,10 @@ def showprofilecoordinator(request,member,id):
 	if not request.session['membertype']=="admin":
 		return HttpResponseRedirect('login')
 	else:
+		if member=="mentee":
+			pass
+		elif member =="mentor":
+			pass
 		response = HttpResponse()
 		response.write("Yay")
 		return response
