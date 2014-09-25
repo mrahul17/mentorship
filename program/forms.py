@@ -24,7 +24,7 @@ class EditStudentProfile(forms.Form):
 	for interesting in interest.objects.all().values():
 		list2.append(interesting.values())
 	department = forms.ChoiceField(choices =list1 ,widget=forms.Select(attrs={'class':'form-control','placeholder':'Department','autofocus':'autofocus'}),label='')
-	cgpa = forms.DecimalField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'CGPA'}),label='')
+	cgpa = forms.DecimalField( max_digits=5, decimal_places=2,widget=forms.TextInput(attrs={'class':'form-control','placeholder':'CGPA'}),label='')
 	rollnumber = forms.CharField(widget = forms.TextInput(attrs={'class':'form-control','placeholder':'Roll Number'}),label='')
 
 	interest1 = forms.ChoiceField(choices =list2 ,widget=forms.Select(attrs={'class':'form-control','placeholder':'1st Interest'}),label='')

@@ -156,8 +156,9 @@ def editProfile(request):
 	form = ''
 	if request.method=='GET' and request.session['membertype']=="student":
 		try:
-			filleddata = studentpreferences.objects.get(id = students.objects.get(id = request.session['id']))
-			form = EditStudentProfile({'department':filleddata.department.id,'cgpa':filleddata.cgpa,'interest1':filleddata.interest1.id,'interest2':filleddata.interest2.id,'interest3':filleddata.interest3.id,'interest4':filleddata.interest4.id})
+			filledpreference = studentpreferences.objects.get(id = students.objects.get(id = request.session['id']))
+			profiledata = students.objects.get(id = request.session['id'])
+			form = EditStudentProfile({'department':profiledata.department.id,'rollnumber':profiledata.rollnumber,'cgpa':profiledata.cgpa,'interest1':filledpreference.interest1.id,'interest2':filledpreference.interest2.id,'interest3':filledpreference.interest3.id,'interest4':filledpreference.interest4.id})
 		except studentpreferences.DoesNotExist:
 			form = EditStudentProfile()
 		return render(request,'editProfile.html',{'firstname':request.session['firstname'],'form':form,'msg':''})
@@ -179,14 +180,14 @@ def editProfile(request):
 				interest3 = interest.objects.get(id = form.cleaned_data['interest3'])
 				interest4 = interest.objects.get(id = form.cleaned_data['interest4'])
 				rollnumber = form.cleaned_data['rollnumber']
-				interestlist = [interest1,interest2,interest3,interest4]
-				if len(interestlist)!=len(set(interestlist)):
-					try:	
-						filleddata = studentpreferences.objects.get(id = students.objects.get(id = request.session['id']))
-						form = EditStudentProfile({'department':filleddata.department.id,'cgpa':filleddata.cgpa,'interest1':filleddata.interest1.id,'interest2':filleddata.interest2.id,'interest3':filleddata.interest3.id,'interest4':filleddata.interest4.id})
-					except studentpreferences.DoesNotExist:
-						form = EditStudentProfile()
-					return render(request,'editProfile.html',{'form':form,'msg':'You have to specify different interest or leave it blank'})
+				# interestlist = [interest1,interest2,interest3,interest4]
+				# if len(interestlist)!=len(set(interestlist)):#check if distinct interests are given
+				# 	try:	
+				# 		filleddata = studentpreferences.objects.get(id = students.objects.get(id = request.session['id']))
+				# 		form = EditStudentProfile({'department':filleddata.department.id,'cgpa':filleddata.cgpa,'interest1':filleddata.interest1.id,'interest2':filleddata.interest2.id,'interest3':filleddata.interest3.id,'interest4':filleddata.interest4.id})
+				# 	except studentpreferences.DoesNotExist:
+				# 		form = EditStudentProfile()
+				# 	return render(request,'editProfile.html',{'form':form,'msg':'You have to specify different interest or leave it blank'})
 
 				department = departments.objects.get(id =form.cleaned_data['department'])
 				cgpa = form.cleaned_data['cgpa']
@@ -201,11 +202,12 @@ def editProfile(request):
 					preference.interest4 = interest4
 					obj.cgpa = cgpa
 					preference.save()
+					students.objects.filter(id = request.session['id']).update(cgpa = cgpa,department = department)
+
 					obj.save()
 				except studentpreferences.DoesNotExist:
 					preference = studentpreferences(id =obj,interest1=interest1,interest2=interest2,interest3=interest3,interest4=interest4) 
 					students.objects.filter(id = request.session['id']).update(cgpa = cgpa,department = department)
-
 					preference.save()
 				return render(request,'home.html',{'msg':'Your preferences have been updated.'})
 			else:
@@ -244,6 +246,7 @@ def showProfile(request):
 	userid1 = request.session['id']
 	membertype = request.session['membertype']
 	preferences = {}
+	profiledata = {}
 	if membertype=='student':
 		try:
 			preferences = studentpreferences.objects.get(id = userid1)
@@ -251,8 +254,8 @@ def showProfile(request):
 			from program.forms import EditStudentProfile
 			form = EditStudentProfile()
 			return render(request,'editProfile.html',{'form':form})
-		
-		return render(request,'profile.html',{'preferences':preferences,'msg':'','membertype':membertype})
+		profiledata = students.objects.get(id = request.session['id'])
+		return render(request,'profile.html',{'profiledata':profiledata,'preferences':preferences,'msg':'','membertype':membertype})
 
 	elif membertype=='alumni':
 		try:
