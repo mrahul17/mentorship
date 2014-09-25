@@ -165,8 +165,8 @@ def editProfile(request):
 	if request.method=='GET' and request.session['membertype']=="alumni":
 		try:
 			filleddata = alumnipreferences.objects.get(id = alumni.objects.get(id = request.session['id']))
-			filleddata2 = alumni.objects.get(id=request.session['id'])
-			form = EditAlumniProfile({'department':filleddata.department.id,'interest':filleddata.interest.id,'noofmentees':filleddata.noofmentees,'organization':filleddata2.organization,'designation':filleddata2.designation})
+			profiledata = alumni.objects.get(id=request.session['id'])
+			form = EditAlumniProfile({'department':profiledata.department.id,'batch':profiledata.batch,'interest':filleddata.interest.id,'noofmentees':filleddata.noofmentees,'organization':profiledata.organization,'designation':profiledata.designation})
 		except alumnipreferences.DoesNotExist:
 			form = EditAlumniProfile()
 		return render(request,'editProfile.html',{'form':form,'msg':''})
@@ -192,6 +192,7 @@ def editProfile(request):
 				department = departments.objects.get(id =form.cleaned_data['department'])
 				cgpa = form.cleaned_data['cgpa']
 				obj = students.objects.get(id = request.session['id'])
+				batch = form.cleaned_data['batch']
 				try:
 					preference = studentpreferences.objects.get(id = obj)
 					obj.rollnumber = rollnumber
@@ -202,12 +203,12 @@ def editProfile(request):
 					preference.interest4 = interest4
 					obj.cgpa = cgpa
 					preference.save()
-					students.objects.filter(id = request.session['id']).update(cgpa = cgpa,department = department)
+					students.objects.filter(id = request.session['id']).update(cgpa = cgpa,department = department,batch = batch)
 
 					obj.save()
 				except studentpreferences.DoesNotExist:
 					preference = studentpreferences(id =obj,interest1=interest1,interest2=interest2,interest3=interest3,interest4=interest4) 
-					students.objects.filter(id = request.session['id']).update(cgpa = cgpa,department = department)
+					students.objects.filter(id = request.session['id']).update(cgpa = cgpa,department = department,batch = batch)
 					preference.save()
 				return render(request,'home.html',{'msg':'Your preferences have been updated.'})
 			else:
@@ -216,7 +217,7 @@ def editProfile(request):
 		else:
 			form = EditAlumniProfile(request.POST)
 			if form.is_valid():	
-				department = departments.objects.get(id =form.cleaned_data['department'])
+				department = departments.objects.get(id = form.cleaned_data['department'])
 				interest = interest.objects.get(id = form.cleaned_data['interest'])	
 				noofmentees = form.cleaned_data['noofmentees']	
 				organization = form.cleaned_data['organization']
@@ -227,12 +228,13 @@ def editProfile(request):
 					preference = alumnipreferences.objects.get(id=obj)
 					preference.interest = interest
 					preference.noofmentees = noofmentees
+					alumni.objects.filter(id = request.session['id']).update(designation = designation,organization=organization,batch = batch,department = department)
 					preference.save()
 				except alumnipreferences.DoesNotExist:
 					preference = alumnipreferences(id =obj,interest=interest,noofmentees = noofmentees) 
 					preference.save()
 					
-				alumni.objects.filter(id = request.session['id']).update(designation = designation,organization=organization,batch = batch,department = department)
+					alumni.objects.filter(id = request.session['id']).update(designation = designation,organization=organization,batch = batch,department = department)
 
 				return render(request,'home.html',{'msg':'Your preferences have been updated.'})
 			else:
@@ -264,8 +266,8 @@ def showProfile(request):
 			from program.forms import EditAlumniProfile
 			form = EditAlumniProfile()
 			return render(request,'editProfile.html',{'form':form})
-		
-		return render(request,'profile.html',{'preferences':preferences,'msg':'','membertype':membertype})
+		profiledata = alumni.objects.get(id = request.session['id'])
+		return render(request,'profile.html',{'profiledata':profiledata,'preferences':preferences,'msg':'','membertype':membertype})
 
 def mentorlist(request,suggest="off"):
 	result = accessCheck(request)
@@ -295,44 +297,29 @@ def mentorlist(request,suggest="off"):
 			interest3 = preference.interest3
 			interest4 = preference.interest4
 		
-			match1 = alumnipreferences.objects.filter(interest = interest1).values('id','department','interest')
-			match2 = alumnipreferences.objects.filter(interest = interest2).values('id','department','interest')
-			match3 = alumnipreferences.objects.filter(interest = interest3).values('id','department','interest')
-			match4 = alumnipreferences.objects.filter(interest = interest4).values('id','department','interest')
+			match1 = alumnipreferences.objects.filter(interest = interest1)
+			match2 = alumnipreferences.objects.filter(interest = interest2)
+			match3 = alumnipreferences.objects.filter(interest = interest3)
+			match4 = alumnipreferences.objects.filter(interest = interest4)
+
 			if match1:
 				for match in match1:
-					alum = alumni.objects.get(id = match['id'])
-					match['department'] = departments.objects.get(id=match['department']).department
-					match['interest'] = interest.objects.get(id=match['interest']).interest
-					match['organization'] = alum.organization
-					match['designation'] = alum.designation
-					al1.append([match['id'],match['department'],match['interest'],match['organization'],match['designation']])
+					alum = match.id
+					al1.append([alum.id,alum.department.department,match.interest.interest,alum.organization,alum.designation])
 			if match2:
 				for match in match2:
-					alum = alumni.objects.get(id = match['id'])
-					match['department'] = departments.objects.get(id=match['department']).department
-					match['interest'] = interest.objects.get(id=match['interest']).interest
-					match['organization'] = alum.organization
-					match['designation'] = alum.designation
-					al2.append([match['id'],match['department'],match['interest'],match['organization'],match['designation']])
+					alum = match.id
+					al2.append([alum.id,alum.department.department,match.interest.interest,alum.organization,alum.designation])
 
 			if match3:
 				for match in match3:
-					alum = alumni.objects.get(id = match['id'])
-					match['department'] = departments.objects.get(id=match['department']).department
-					match['interest'] = interest.objects.get(id=match['interest']).interest
-					match['organization'] = alum.organization
-					match['designation'] = alum.designation
-					al3.append([match['id'],match['department'],match['interest'],match['organization'],match['designation']])
+					alum = match.id
+					al3.append([alum.id,alum.department.department,match.interest.interest,alum.organization,alum.designation])
 
 			if match4:
 				for match in match4:
-					alum = alumni.objects.get(id = match['id'])
-					match['department'] = departments.objects.get(id=match['department']).department
-					match['interest'] = interest.objects.get(id=match['interest']).interest
-					match['organization'] = alum.organization
-					match['designation'] = alum.designation	
-					al4.append([match['id'],match['department'],match['interest'],match['organization'],match['designation']])
+					alum = match.id
+					al4.append([alum.id,alum.department.department,match.interest.interest,alum.organization,alum.designation])
 			return render(request,'mentorlist.html',{'match1':al1,'match2':al2,'match3':al3,'match4':al4})
 		else:
 			
@@ -346,7 +333,7 @@ def dashboard(request):
 	if request.session['membertype']=="student":
 		return render(request,'mentee.html',{'':''}) 
 	if request.session['membertype']=="alumni":
-		return render(request,'mentor.html',{'',''})
+		return render(request,'mentor.html',{'':''})
 
 def logout(request):
 	result = accessCheck(request)

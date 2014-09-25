@@ -29,7 +29,11 @@ Some Error occurred in contacting the database. Could not load preferences.
 {% endif %}
 {% if membertype = "alumni" %}
 <div class="col-md-6"><table class="table table-striped">
-<tr><td>Department</td><td>{{preferences.department.department}}</td></tr>
+<tr><td>Department</td><td>{{profiledata.department.department}}</td></tr>
+<tr><td>Organization</td><td>{{profiledata.organization}}</td></tr>
+<tr><td>Designation</td><td>{{profiledata.designation}}</td></tr>
+<tr><td>Contact Number</td><td>{{profiledata.contactnumber}}</td></tr>
+
 <tr><td>Interest</td><td>{{preferences.interest.interest}}</td></tr>
 
 <tr><td>Number of Mentees</td><td>{{preferences.noofmentees}}</td></tr>
