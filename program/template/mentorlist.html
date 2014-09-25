@@ -2,7 +2,7 @@
 {% include "includes/menubar.html" %}
 <form action="selectmentor" method="POST">{% csrf_token %}
 {% if match1 %}
-<table class="table">
+<table class="table" style="background-color:#D1FFDC">
 <tr><th>Select</th><th>Department</th><th>Interest</th><th>organization</th><th>Desingation</th></tr>
 {% for match in match1%}
 <tr>
@@ -19,7 +19,7 @@
 
 {% endif %}
 {% if match2 %}
-<table class="table">
+<table class="table" style="background-color:#D4FC7E">
 <tr><th>Select</th><th>Department</th><th>Interest</th><th>organization</th><th>Desingation</th></tr>
 {% for match in match2 %}
 <tr>
@@ -36,7 +36,7 @@
 
 {% endif %}
 {% if match3 %}
-<table class="table">
+<table class="table" style="background-color:#EAFC7E">
 <tr><th>Select</th><th>Department</th><th>Interest</th><th>organization</th><th>Desingation</th></tr>
 {% for match in match3 %}
 <tr>

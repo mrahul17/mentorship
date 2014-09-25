@@ -1,0 +1,23 @@
+{% include "includes/head.html" %}
+{% include "includes/menubar.html" %}
+
+{% if mentee %}
+<table class="table">
+<tr><th>Id</th><th>Name</th><th>Department</th><th>Roll Number</th><th>Email Id</th><th>Contact Number</th><td>Interest1</td><td>Interest2</td><td>Interest3</td><td>Interest4</td></tr>
+<tr><td>{{mentee.id}}</td><td>{{mentee.firstname}} {{mentee.lastname}}</td><td>{{mentee.department}}</td><td>{{mentee.rollnumber}}</td><td>{{mentee.emailid}}</td><td>{{mentee.contactnumber}}</td><td>{{menteepref.interest1.interest}}</td><td>{{menteepref.interest2.interest}}</td><td>{{menteepref.interest3.interest}}</td><td>{{menteepref.interest4.interest}}</td></tr>
+
+</table>
+
+
+
+{% endif %}
+{% if mentor %}
+<table class="table">
+<tr><th>Id</th><th>Name</th><th>Department</th><th>Batch</th><th>Email Id</th><th>Contact Number</th><th>Company</th><th>Designation</th><th>Interest</th><th>No. of Mentee</th></tr>
+<tr><td>{{mentor.id}}</td><td>{{mentor.firstname}} {{mentor.lastname}}</td><td>{{mentor.department.department}}</td><td>{{mentor.batch}}</td><td>{{mentor.emailid}}</td><td>{{mentor.contactnumber}}</td><td>{{mentor.organization}}</td><td>{{mentor.designation}}</td><td>{{mentorpref.interest.interest}}</td><td>{{mentorpref.noofmentees}}</td></tr>
+
+</table>
+
+
+
+{% endif %}

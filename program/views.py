@@ -430,9 +430,13 @@ def showprofilecoordinator(request,member,id):
 		return HttpResponseRedirect('login')
 	else:
 		if member=="mentee":
-			pass
+			mentee = students.objects.get(id = id)
+			menteepref = studentpreferences.objects.get(id = mentee)
+			return render(request,'showprofile.html',{'mentee':mentee,'menteepref':menteepref})
 		elif member =="mentor":
-			pass
+			mentor = alumni.objects.get(id = id)
+			mentorpref = alumnipreferences.objects.get(id = mentor)
+			return render(request,'showprofile.html',{'mentor':mentor,'mentorpref':mentorpref})
 		response = HttpResponse()
 		response.write("Yay")
 		return response
