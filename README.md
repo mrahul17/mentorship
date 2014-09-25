@@ -1,7 +1,7 @@
 mentorship
 ==========
 
-This is the portal for the Mentorship Program of IIT Kharagpur. This program is an initiative of Students' Alumni Cell, IIT Kharagpur.
+This is the portal for the Mentorship Program of IIT Kharagpur, built in django. This program is an initiative of Students' Alumni Cell, IIT Kharagpur.
  Students and alumni of a college will register for the Mentorship Program and fill in their preferences. Students will be shown a list of mentors that have similar interests. Through an extensive algorithm, the allocation of mentees to the mentors will be done automatically by the mentors. Also, the portal will send emails automatically.
  
  
